@@ -1,0 +1,5 @@
+"0",""
+"0","corr_het <- cbind(sMLH_res, clones_het$het) %>%"
+"0","  `colnames<-`(c(""smlh"",""mhc_het"")) %>%"
+"0","  as.data.frame()"
+"0",""

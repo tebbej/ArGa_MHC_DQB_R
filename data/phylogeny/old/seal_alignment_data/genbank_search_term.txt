@@ -1,0 +1,1 @@
+mhc AND "dqb" AND (phocidae[Organism] OR otariidae[Organism] OR pinniped* OR seal OR seals) 

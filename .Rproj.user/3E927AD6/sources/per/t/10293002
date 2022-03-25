@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1619673972120.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "616128185",
+    "id" : "10293002",
+    "lastKnownWriteTime" : 1634292933,
+    "last_content_update" : 1634292933692,
+    "path" : "C:/Users/jnteb/Dropbox/Work/HoffmanLab/Projects/Antarctic_Fur_Seal_MHC/ArGa_MHC_DQB_R/R/clone_analysis.R",
+    "project_path" : "R/clone_analysis.R",
+    "properties" : {
+        "cursorPosition" : "214,0",
+        "scrollLine" : "201"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

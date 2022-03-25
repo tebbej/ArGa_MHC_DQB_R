@@ -1,0 +1,6 @@
+"0","# returning the output to a list decreases code run time"
+"0","out <- get_allele_info(genotype_info)"
+"0",""
+"0","# assignment is shorter than function calculations"
+"0","alleles <- out[[1]]"
+"0","genotype_fas <- out[[2]]"

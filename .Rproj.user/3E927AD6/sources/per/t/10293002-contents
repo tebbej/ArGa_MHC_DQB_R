@@ -1,0 +1,352 @@
+require(Biostrings) # easily work with genetic string sets
+require(tidyverse) # package collection for easy and pretty data science with R
+require(gridExtra) # ggplot grid manipulations
+require(egg) # ggplot grid and plot alignment functions
+require(ggpubr) # ggplot grid and plot alignment functions
+require(ape)
+require(ggtree)
+require(treeio)
+
+## BUILDING ANALYSIS DATA SETS ##
+# Data set to analyse: Fasta file that contains multiple clones for one individual
+genotype_info <- readDNAStringSet("data/Clones_MHC_ArGa_exon_20210319.fas")
+
+# Data set containing alleles identified by Illumina NGS analysis
+ngs_alleles <- readDNAStringSet("data/ArGa-DQB-NGS_Artemis_20210301.fas") %>%
+  as.vector()
+
+# identify index position and name of uniques seqs in the data set
+source(file="R/get_unique_seqs.R")
+unique_identifier <- get_unique_seqs(genotype_info, 
+                                     allowed.unique.seq = 1, 
+                                     max.mismatch = 0)
+
+# delete unique sequences from the data
+if (!purrr::is_empty(unique_identifier[[1]])) {
+  genotype_fas <- genotype_info[-unique_identifier$index_unique_seq]
+}
+
+# create data set with allele sequences
+allele_seq <- unique(genotype_fas)
+# console output for no. of alleles that can be identified
+message(paste0("Data set contains ", length(unique(genotype_fas)), " unique sequences/alleles"))
+
+# count occurences of identified alleles in the data
+allele_count <- as.vector(
+  sapply(seq_along(allele_seq), function(i) 
+    sum(match(genotype_fas, allele_seq[[i]]), na.rm = T))
+)
+
+# create data.frame where alleles will be named after its decreasing frequency in the data
+# sorted by the prior allele count
+alleles <- data.frame(seq = as.vector(allele_seq), 
+                      counts = allele_count,
+                      row.names = NULL) %>%
+  arrange(., desc(counts)) %>%
+  # find shared sequence between cloning data and ngs data
+  mutate(., shared_ngs = apply(
+    sapply(ngs_alleles, # go through each sequence in ngs_alleles
+           vcountPattern, # apply vcountPattern to find where an ngs_alleles sequence is found
+           subject = seq),  # in alleles$seq
+    1, sum)) %>% # result is a matrix with rows x col = length of alleles$seq x ngs_alleles
+  # apply sums each of those rows (share the same indexing as alleles$seq) to identify where
+  # sequences are shared between cloning and ngs data sets
+  mutate(frequency = (counts/sum(counts))*100) %>%
+  `rownames<-`(., sapply(seq_along(allele_count), function(i) 
+    paste0("ArGa-DQB*",i))) %>%
+  rownames_to_column("name")
+
+
+# include metadata dataframe like family id, colony id, maturity
+metadata <- read.table(file = "data/sample_list.txt", header = T) %>%
+  mutate(real_id = factor(real_id, levels = str_sort(real_id, numeric = T)),
+         colony = as.factor(colony),
+         maturity = as.factor(maturity),
+         family = as.factor(family)) %>%
+  arrange(real_id) %>%
+  arrange(colony)
+
+# create data.frame where each cloning sequence has the info on its corresponding allele number
+# allele numbering follows the exact same naming convention as allele names (1 most frequent, 30 least frequent)
+
+# create a list with 30 elements that corresponds to allele numbers and has info on the indexes of said allele found in the df
+func <- function(x){
+  which(match(as.vector(genotype_fas), x) == T)
+}
+variant_index <- sapply(alleles$seq, func)
+
+# loop assigns the correct variant number to its corresponding sequence index in the data.frame 
+variant_in_df <- vector(length = length(genotype_fas))
+variant_count_in_df <- vector(length = length(genotype_fas))
+variant_counter <- vector(length = length(genotype_fas))
+variant_names <- vector(length = length(genotype_fas))
+i <- 1
+for (seqs in variant_index) {
+  variant_in_df[seqs] <- i
+  variant_count_in_df[seqs] <- alleles$counts[i]
+  variant_counter[seqs] <- seq(1,length(seqs))
+  variant_names[seqs] <- alleles$name[i]
+  i <- i+1
+}
+
+# actual data.frame, where each allele is a numeric info in the df (important for histogram with density encoding)
+clone_allele_df <- data.frame(sequence = genotype_fas, # allele sequences
+                              allele = as.factor(variant_names), # allele names
+                              variant_no = variant_in_df, # allele number after frequency in data
+                              variant_counter = variant_counter, # number of occurence of an allele in the data (increasing)
+                              variant_count = variant_count_in_df) %>% # number of total allele count throughout the data
+  rownames_to_column(.) %>%
+  `names<-`(., c("clone_var", "sequence", "allele", "variant_no", "variant_counter", "variant_count"))
+# create df column with sample id (several clones belong to one individual/sample id)
+clone_allele_df <- clone_allele_df %>%  
+  mutate(., allele_frequency = (variant_count/dim(clone_allele_df)[1])*100) %>% 
+  mutate(., id = sapply(clone_allele_df$clone_var, function(x) {
+    stringr::str_split(x, "-")[[1]][1] %>% 
+      paste0(., collapse = "-") %>% 
+      as.factor()
+  }))
+
+#update clone_allele_df with new info
+index <- match(as.character(clone_allele_df$id), metadata$clone_id)
+clone_allele_df <- clone_allele_df %>%
+  mutate(id = metadata$real_id[index],
+         colony = metadata$colony[index],
+         maturity = metadata$maturity[index],
+         family = metadata$family[index])
+
+
+
+# clean_up
+rm(allele_seq, allele_count, i, seqs, variant_count_in_df, variant_in_df, variant_counter, variant_names, variant_index)
+
+## HISTOGRAM/FREQUENCY PLOT ##
+
+allele_freq_plot <- ggplot(clone_allele_df[1:771,], aes(x = variant_no, group = desc(variant_counter), fill = variant_counter)) + 
+  geom_bar(aes(y = stat(count) / sum(count))) + 
+  scale_y_continuous(labels = scales::label_percent(accuracy = 1),
+                     limits = c(0,.2),
+                     expand = c(0,0)) +
+  scale_fill_viridis_c(option = "viridis",
+                       begin = 0,
+                       end = 1) +
+  ylab("Frequency\n") +
+  labs(fill = "Allele\ncounts") + 
+  scale_x_continuous(breaks = seq_along(unique(clone_allele_df$allele)),
+                     labels = str_sort(unique(clone_allele_df$allele), numeric = T),
+                     expand = c(0, 0.3)) +  
+  theme_minimal() +
+  theme(panel.grid = element_line(color = "white"),
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        axis.line = element_line(color = "black"),
+        axis.text = element_text(color = "black"),
+        axis.title = element_text(color = "black", 
+                                  margin = margin(10,10,20,10)),
+        axis.ticks = element_line(color = "black", 
+                                  size = 0.2),
+        axis.line.x = element_line(color = "black"),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.x.bottom = element_text(angle = 45, 
+                                          vjust = 1, 
+                                          hjust = 1, 
+                                          size = 11),
+        axis.line.y = element_line(color = "black"),
+        axis.title.y = element_text(size = 15.5),
+        axis.ticks.y = element_blank(),
+        axis.ticks.length = unit(.15,"cm"),
+        plot.background = element_rect(color = "white", 
+                                       fill = "white"),
+        legend.position = "none",
+        plot.margin = unit(c(0.5,0.5,0.5,0,5), "cm")
+  )
+allele_freq_plot
+ggsave("graphics/allele_frequency_cloning_data_no_artefacts.png", allele_freq_plot, dpi = 400)
+
+clone_allele_df <- clone_allele_df %>% arrange(., variant_no)
+
+## HEATMAP ##
+# create suitable data frame that contains allele names, sample ids and the respective number an allele occurs in
+# sample id
+allele_summary <- matrix(nrow = length(unique(clone_allele_df$id)),
+                         ncol = length(unique(clone_allele_df$allele))) %>%
+  `rownames<-`(., as.character(unique(clone_allele_df$id))) %>%
+  `colnames<-`(., as.character(
+    str_sort(
+      levels(
+        clone_allele_df$allele), 
+      numeric = T)))
+
+# fill matrix with info on which and how many alleles are found in the clones for each individual fur seal
+for (i in seq_along(unique(clone_allele_df$id))) {
+  alleles_in_id <- summary(clone_allele_df$allele[clone_allele_df$id == unique(clone_allele_df$id)[i]])
+  allele_summary[i, ] <- alleles_in_id[str_sort(names(alleles_in_id), numeric = T)]
+}
+
+# convert to data.frame and create a "tidy" version, ggplot and tidyverse can handle easily
+allele_summary <- allele_summary %>% 
+  t() %>%
+  as.data.frame() %>%
+  rownames_to_column("alleles") %>%
+  pivot_longer(-c(alleles), names_to = "sample_id", values_to = "counts") %>%
+  mutate(., alleles = factor(alleles, levels = str_sort(unique(alleles), numeric = T)),
+         sample_id = as.factor(sample_id)) %>%
+  arrange(., sample_id) %>%
+  arrange(., alleles)
+
+# plot heatmap for all
+clone_heatmap <- ggplot(allele_summary, aes(x = alleles,y = sample_id, fill = log(counts+1))) + 
+  geom_tile() + 
+  coord_fixed(ratio = 0.6) +
+  scale_fill_viridis_c() +
+  xlab("Alleles") +
+  ylab("Sample ID") +
+  labs(fill = "Log \nclone \nnumber") +
+  theme(
+    axis.text.x.bottom = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_blank(),
+    plot.margin = unit(c(0.5, 0, 0, 0), "cm"),
+    legend.position = "none"
+  )
+clone_heatmap
+
+# next try to create separate heatmaps for mum-pup pairs and single individuals
+
+# create vector with info about mum pup pairings
+paired <- c(rep(0,24), rep(1,7), 0, 0, rep(1,4), 0, rep(1,14), 0,1,1,0) %>%
+  factor(., levels = c(0,1))
+
+# bind to df and arrange for paired
+allele_summary <- cbind(allele_summary, paired = rep(paired,30)) %>%
+  arrange(., desc(paired)) %>%
+  arrange(., alleles) %>%
+  mutate(., sample_id = fct_reorder(sample_id, as.numeric(paired)))
+
+allele_summary_paired <- allele_summary[allele_summary$paired == 1,] %>%
+  arrange(., sample_id)
+  
+allele_summary_unpaired <- allele_summary[allele_summary$paired == 0,] %>%
+  arrange(., sample_id) %>%
+  mutate(., sample_id = fct_reorder(sample_id, as.numeric(paired)))
+
+# plot heatmaps
+clone_heatmap_unpaired <- ggplot(allele_summary_unpaired, aes(x = alleles,y = sample_id, fill = log(counts+1))) + 
+  geom_tile() + 
+  coord_fixed(ratio = 0.6) +
+  scale_fill_viridis_c() +
+  xlab("Alleles") +
+  ylab("Sample ID") +
+  labs(fill = "Log \nclone \nnumber") +
+  theme(
+    axis.text.x.bottom = element_blank(),
+    axis.title.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.title.y = element_blank(),
+    plot.margin = unit(c(0.5, 0, 0, 0), "cm"),
+    legend.position = "none"
+    )
+clone_heatmap_unpaired
+
+clone_heatmap_paired <- ggplot(allele_summary_paired, aes(x = alleles,y = sample_id, fill = log(counts+1))) + 
+  geom_tile() + 
+  coord_fixed(ratio = 0.6) +
+  scale_fill_viridis_c() +
+  xlab("Alleles") +
+  ylab("Sample ID") +
+  labs(fill = "Log \nclone \nnumber") +
+  theme(
+    axis.text.x.bottom = element_text(angle = 45, 
+                                      vjust = .98, 
+                                      hjust = .94),
+    axis.title.y = element_blank(),
+    plot.margin = unit(c(0, 0, 0, 0), "cm")
+    )
+clone_heatmap_paired
+
+
+clone_heatmap <- egg::ggarrange(clone_heatmap_unpaired,
+                                clone_heatmap_paired,
+                         ncol=1)
+
+clone_heatmap <- ggpubr::as_ggplot(clone_heatmap)
+
+## PHYLOGENETIC TREE ##
+# read in tree that was created in MEGAX (.newick file format)
+
+seal_dqb <- read.tree(file = "data/phylogeny/seal_dqb.nwk")
+load(file = "data/phylogeny/node_name.RData")
+
+p <- ggtree(seal_dqb, branch.length='none', layout='circular')
+p <- p %<+% node_name + geom_tiplab(aes(), hjust = -.08) +
+  xlim(0,36) +
+  geom_tippoint(aes(color = grp)) +
+  theme(legend.position = "none")
+p
+# ggsave(filename = "graphics/seal_dqb_phylogeny.pdf", p,
+#        height = 194,
+#        width = 229,
+#        units = "mm",
+#        dpi = 400)
+# größe stimmt noch nicht
+
+## NGS AND CLONING DATA COMPARISON (HEATMAP) ##
+miseq_data <- readDNAStringSet("data/ArGa-DQB-NGS_Artemis_20210301.fas")
+miseq_data <- miseq_data[-length(miseq_data)]
+clone_genotypes <- genotype_info <- readDNAStringSet("data/ArGa-DQB_clone-alleles_20210430.fas")
+
+
+miseq_in_genotypes <- as.matrix(
+  sapply(seq_along(miseq_data), 
+         function(x) vcountPattern(as.vector(miseq_data[x]), clone_genotypes)))
+colnames(miseq_in_genotypes) <- names(miseq_data)
+rownames(miseq_in_genotypes) <- names(clone_genotypes)
+
+
+
+
+miseq_in_genotypes <- miseq_in_genotypes %>% # convert matrix to long data frame for ggplot heatmap format
+  as.data.frame() %>%
+  rownames_to_column("clone_alleles") %>%
+  pivot_longer(-c(clone_alleles), names_to = "ngs_alleles", values_to = "counts") %>%
+  mutate(., clone_alleles = factor(clone_alleles, levels = str_sort(unique(clone_alleles), numeric = T)),
+         ngs_alleles = factor(ngs_alleles, levels = rev(str_sort(unique(ngs_alleles), numeric = T)))) %>%
+  arrange(., desc(ngs_alleles)) %>% #sort both alleles for tidy plotting
+  arrange(., clone_alleles) %>% 
+  # create column with information whether one or both of the listed allele is a putative artefact or not
+  mutate(., artefact_ngs = ifelse((ngs_alleles %in% paste0("ArGa-DQB*", c(15,20,21))) == T, 1, 0)) %>%
+  mutate(., artefact_clone = ifelse((clone_alleles %in% paste0("ArGa-DQB*", 20:30)) == T, 1,0))
+
+# color scheme for the axis tick labels
+ x_col <- c(rep("black", 19), rep("red", 11))
+ # 1,2,7 index result position from sorting: 21-21 or 20 or 15+1 = 1,2, and 7
+ y_col <- ifelse((1:21 %in% c(1,2,7)) == T, "red", "black")
+
+
+ngs_clone_comparison <- ggplot(miseq_in_genotypes, aes(x = clone_alleles,y = ngs_alleles, fill = counts)) + 
+  geom_tile(aes(width=0.9, height=0.9)) + 
+  scale_fill_viridis_c(option = "cividis") +
+  xlab("Putative clone alleles") +
+  ylab("Putative MiSeq alleles") +
+  theme(panel.background = element_blank(),
+    axis.text.x.bottom = element_text(angle = 45, 
+                                      vjust = 1, 
+                                      hjust = 1, 
+                                      size = 11,
+                                      color = x_col),
+    axis.text.y = element_text(size = 11,
+                               color = y_col),
+    plot.margin = unit(c(0.5, 0, 0, 0), "cm"),
+    legend.position = "none"
+  )
+ngs_clone_comparison
+# ggsave(filename = "graphics/ngs_clone_comparison.png",
+#        plot = ngs_clone_comparison, dpi = 400)
+
+
+
+
+
+
+

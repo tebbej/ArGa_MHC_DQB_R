@@ -1,0 +1,8 @@
+"0",""
+"0","df.sats <- genind2df(msats_gen, sep = ""/"")"
+"0","df.sats <- df.sats[match(metadata_df$real_id, rownames(df.sats)),]"
+"0",""
+"0","df.mom <- df.sats[which(metadata_df$maturity ==""M""),] "
+"0","df.mom <- df2genind(df.mom[,-1], sep = ""/"", pop = df.mom[,1])"
+"0","df.pup <- df.sats[which(metadata_df$maturity ==""P""),]"
+"0","df.pup <- df2genind(df.pup[,-1], sep = ""/"", pop = df.pup[,1])"

@@ -1,0 +1,160 @@
+
+1. Monachus schauinslandi MHC class II antigen (DQB) gene, DQB*HMS1 allele, exon 2 and partial cds
+141 bp linear DNA 
+AY007203.1 GI:10442809
+
+2. Monachus schauinslandi MHC class II antigen (DQB) gene, DQB*HMS2 allele, exon 2 and partial cds
+141 bp linear DNA 
+AY007204.1 GI:10442811
+
+3. Mirounga leonina clone SES8 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111038.1 GI:4028669
+
+4. Mirounga leonina clone SES7 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111037.1 GI:4028667
+
+5. Mirounga leonina clone SES6 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111036.1 GI:4028665
+
+6. Mirounga leonina clone SES4 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111034.1 GI:4028661
+
+7. Mirounga leonina clone SES5 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111035.1 GI:4028663
+
+8. Mirounga leonina clone SES3 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111033.1 GI:4028659
+
+9. Mirounga leonina clone SES1 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111032.1 GI:4028657
+
+10. Mirounga angustirostris clone NES2 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111031.1 GI:4028655
+
+11. Mirounga angustirostris clone NES1 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111030.1 GI:4028653
+
+12. Arctocephalus forsteri clone NFS4 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111045.1 GI:4028683
+
+13. Arctocephalus forsteri clone NFS3 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111044.1 GI:4028681
+
+14. Arctocephalus forsteri clone NFS1 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111043.1 GI:4028679
+
+15. Arctocephalus gazella clone AFS4 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111042.1 GI:4028677
+
+16. Arctocephalus gazella clone AFS3 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111041.1 GI:4028675
+
+17. Arctocephalus gazella clone AFS2 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111040.1 GI:4028673
+
+18. Arctocephalus gazella clone AFS1 MHC class II antigen (MHC-DQB) gene, exon 2 and partial cds
+141 bp linear DNA 
+AF111039.1 GI:4028671
+
+19. Neophoca cinerea MHC class II antigen (NeciDQB) gene, NeciDQB*03 allele, partial cds
+172 bp linear DNA 
+KP127614.1 GI:829490621
+
+20. Neophoca cinerea MHC class II antigen (NeciDQB) gene, NeciDQB*02 allele, partial cds
+172 bp linear DNA 
+KP127613.1 GI:829490619
+
+21. Neophoca cinerea MHC class II antigen (NeciDQB) gene, NeciDQB*01 allele, partial cds
+172 bp linear DNA 
+KP127612.1 GI:829490617
+
+22. Zalophus wollebaeki partial Zawo-DQB gene for MHC class II antigen, allele Zawo-DQB*03, exon 2
+159 bp linear DNA 
+HE663128.1 GI:384071263
+
+23. Zalophus wollebaeki partial Zawo-DQB gene for MHC class II antigen, allele Zawo-DQB*02, exon 2
+159 bp linear DNA 
+HE663127.1 GI:384071261
+
+24. Zalophus wollebaeki partial Zawo-DQB gene for MHC class II antigen, allele Zawo-DQB*01, exon 2
+159 bp linear DNA 
+HE663126.1 GI:384071259
+
+25. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*11 allele, complete cds
+1,122 bp linear mRNA 
+AF503407.1 GI:22023822
+
+26. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*10 allele, complete cds
+1,122 bp linear mRNA 
+AF503406.1 GI:22023820
+
+27. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*09 allele, complete cds
+876 bp linear mRNA 
+AF503405.1 GI:22023818
+
+28. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*05 allele, complete cds
+1,146 bp linear mRNA 
+AF503401.1 GI:22023812
+
+29. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB-DQB*06 allele, complete cds
+800 bp linear mRNA 
+AF503402.1 GI:22023814
+
+30. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*04 allele, complete cds
+1,146 bp linear mRNA 
+AF503400.1 GI:22023810
+
+31. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*03 allele, complete cds
+1,146 bp linear mRNA 
+AF503399.1 GI:22023808
+
+32. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*02 allele, complete cds
+1,146 bp linear mRNA 
+AF503398.1 GI:22023806
+
+33. Zalophus californianus MHC class II antigen (Zaca-DQB) mRNA, Zaca-DQB*01 allele, complete cds
+1,146 bp linear mRNA 
+AF503397.1 GI:22023804
+
+34. Zalophus californianus MHC class II antigen (Zaca-DQA) mRNA, Zaca-DQA*05 allele, complete cds
+896 bp linear mRNA 
+AF502564.1 GI:22023802
+
+35. Zalophus californianus MHC class II antigen (Zaca-DQA) mRNA, Zaca-DQA*04 allele, complete cds
+896 bp linear mRNA 
+AF502563.1 GI:22023800
+
+36. Zalophus californianus MHC class II antigen (Zaca-DQA) mRNA, Zaca-DQA*03 allele, complete cds
+896 bp linear mRNA 
+AF502562.1 GI:22023798
+
+37. Zalophus californianus MHC class II antigen (Zaca-DQA) mRNA, Zaca-DQA*02 allele, complete cds
+896 bp linear mRNA 
+AF502561.1 GI:22023796
+
+38. Zalophus californianus MHC class II antigen (Zaca-DQA) mRNA, Zaca-DQA*01 allele, complete cds
+896 bp linear mRNA 
+AF502560.1 GI:22023794
+
+39. Zalophus californianus MHC class II antigen (Zaca-DQB) pseudogene mRNA, Zaca-DQB*08 allele, complete sequence
+725 bp linear mRNA 
+AF503404.1 GI:22023817
+
+40. Zalophus californianus MHC class II antigen (Zaca-DQB) pseudogene mRNA, Zaca-DQB*07 allele, complete sequence
+1,057 bp linear mRNA 
+AF503403.1 GI:22023816
