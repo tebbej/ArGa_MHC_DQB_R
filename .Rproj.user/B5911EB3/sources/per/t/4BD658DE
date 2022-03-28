@@ -1,6 +1,6 @@
 {
     "id": "4BD658DE",
-    "path": "C:/Users/Jonas/Dropbox/Work/HoffmanLab/Projects/Antarctic_Fur_Seal_MHC/ArGa_MHC_DQB_R/MHC_DQB_markdown.Rmd",
+    "path": "C:/Users/Jonas/Dropbox/Work/HoffmanLab/Projects/01_ArGa_MHC_clones/ArGa_MHC_DQB_R/MHC_DQB_markdown.Rmd",
     "project_path": "MHC_DQB_markdown.Rmd",
     "type": "r_markdown",
     "hash": "2772802939",
@@ -15,14 +15,14 @@
         "Source": "Source",
         "cursorPosition": "160,24",
         "scrollLine": "136",
-        "last_setup_crc32": "E45B2C50bb338d19"
+        "last_setup_crc32": "A2F6CB93bb338d19"
     },
     "folds": "",
     "lastKnownWriteTime": 1648132438,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1648210820459,
+    "last_content_update": 1648467710370,
     "read_only": false,
     "read_only_alternatives": []
 }

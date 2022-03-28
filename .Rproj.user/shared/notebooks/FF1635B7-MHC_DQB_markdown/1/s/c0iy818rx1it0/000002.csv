@@ -1,5 +1,0 @@
-"0",""
-"0","msats_gen.abs <- poppr::diss.dist(msats_gen) %>% "
-"0","  # create distance matrix"
-"0","  as.matrix()"
-"0",""

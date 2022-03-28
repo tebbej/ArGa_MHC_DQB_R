@@ -1,6 +1,0 @@
-"0","# msats"
-"0","msats_gen_stats <- basic.stats(msats_gen, diploid = TRUE)"
-"0",""
-"0","# mhc clones"
-"0","clone_gen_stats <- basic.stats(clone_gen, diploid = TRUE)"
-"0",""
