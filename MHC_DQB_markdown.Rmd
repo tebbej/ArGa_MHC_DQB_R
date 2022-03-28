@@ -10,59 +10,173 @@ nocite:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  fig.width = 8, fig.height = 8,highlight = TRUE, 
+  strip.white = TRUE,collapse = TRUE, fig.align = "center",
+  warning = F, message = F)
 ```
 
-A script providing all code used in the analyses for the paper by Hoffman *et al.* (2022).
+This document provides all the `R code` used in Hoffman *et al.* (2022). Both the Rmarkdown file and the data can be downloaded from the accompanying GitHub repository on (<https://github.com/tebbej/ArGa_MHC_DQB_R>) as a zip archive containing all the files. We recommend to download or clone this [GitHub repository](https://github.com/tebbej/ArGa_MHC_DQB_R) in order to access the documentation together with all the files that are needed to repeat analyses shown in this document. Just click on the link above and then on the green box `Clone or download`. In order to function properly, the same structure of folders must be kept. If you have any questions, don't hesitate to contact [jonas.tebbe\@uni-bielefeld.de](mailto:jonas.tebbe@uni-bielefeld.de){.email}
 
 ## Packages used for analysis
 
-Necessary packages to run this script. Missing packages can be installed with
-`install.packages()`
+Necessary packages to run this script. Missing packages that are listed on `CRAN` can be installed with
+`install.packages()`, whereas `phyloseq` is available via the `Bioconductor` project:
 
 ```{r echo=TRUE, message=FALSE, warning=FALSE}
-
-## analyses 
-
-library(ade4) # data analysis function
+## Packages used for analyses 
+## -----------------------------------------------------------------------------
+if (!require("ade4", quietly = TRUE)) {
+  install.packages("ade4")
+  library(ade4)
+} else {
+library(ade4) # data analysis function  
+}
+if (!require("adegenet", quietly = TRUE)) {
+  install.packages("adegenet")
+  library(adegenet)
+} else {
 library(adegenet) # handling genetic data / genind objects
+}
+if (!require("ape", quietly = TRUE)) {
+  install.packages("ape")
+  library(ape)
+} else {
 library(ape) # handling phylogenetic tree data
+}
+if (!require("Biostrings", quietly = TRUE)) {
+  install.packages("Biostrings")
+  library(Biostrings)
+} else {
 library(Biostrings) # easily work with genetic string sets
+}
+if (!require("EnvStats", quietly = TRUE)) {
+  install.packages("EnvStats")
+  library(EnvStats)
+} else {
 library(EnvStats) # environmental statistics
+}
+if (!require("genepop", quietly = TRUE)) {
+  install.packages("genepop")
+  library(genepop)
+} else {
 library(genepop) # population genetic analyses
+}
+if (!require("hierfstat", quietly = TRUE)) {
+  install.packages("hierfstat")
+  library(hierfstat)
+} else {
 library(hierfstat) # hierarchical F-statistics
+}
+if (!require("inbreedR", quietly = TRUE)) {
+  install.packages("inbreedR")
+  library(inbreedR)
+} else {
 library(inbreedR) # population genetic analyses
-library(phyloseq) # phyloseq objects
+}
+if (!require("phyloseq", quietly = TRUE)) {
+  if (!require("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager")
+  }
+  BiocManager::install(pkgs = "phyloseq") 
+  library(phyloseq) # phyloseq objects
+} else {
+  library(phyloseq) # phyloseq objects
+}
+if (!require("poppr", quietly = TRUE)) {
+  install.packages("poppr")
+  library(poppr)
+} else {
 library(poppr) # population genetic analyses
+}
+if (!require("vegan", quietly = TRUE)) {
+  install.packages("vegan")
+  library(vegan)
+} else {
 library(vegan) # statistical tools
+}
 
 ## data/object handling
- 
+## -----------------------------------------------------------------------------
+if (!require("tidyverse", quietly = TRUE)) {
+  install.packages("tidyverse")
+  library(tidyverse)
+} else {
 library(tidyverse) # package collection for easy and pretty data science with R
-library(patchwork) #
+}
+if (!require("patchwork", quietly = TRUE)) {
+  install.packages("patchwork")
+  library(patchwork)
+} else {
+library(patchwork) 
+}
+if (!require("reshape2", quietly = TRUE)) {
+  install.packages("reshape2")
+  library(reshape2)
+} else {
 library(reshape2)
+}
+if (!require("RColorBrewer", quietly = TRUE)) {
+  install.packages("RColorBrewer")
+  library(RColorBrewer)
+} else {
 library(RColorBrewer)
+}
+if (!require("magrittr", quietly = TRUE)) {
+  install.packages("magrittr")
+  library(magrittr)
+} else {
 library(magrittr) # pipe operators
+}
+if (!require("gridExtra", quietly = TRUE)) {
+  install.packages("gridExtra")
+  library(gridExtra)
+} else {
 library(gridExtra) # ggplot grid manipulations
+}
+if (!require("ggpubr", quietly = TRUE)) {
+  install.packages("ggpubr")
+  library(ggpubr)
+} else {
 library(ggpubr) # ggplot grid and plot alignment functions
+}
+if (!require("egg", quietly = TRUE)) {
+  install.packages("egg")
+  library(egg)
+} else {
 library(egg) # ggplot grid and plot alignment functions
-
+}
 ```
 
 ## Generate data sets for analyses
 
-Main data set is a .fas-File containing multiple clone sequences for several 
-individuals of the Antaric fur seal (*Arctozephalus gazella*). Load in as a 
+Main data set is a `.fas-File` containing multiple clone sequences for several 
+individuals of the Antarctic fur seal (*Arctozephalus gazella*). Load in as a 
 DNAStringSet.
 
 ```{r echo=TRUE}
+## read sequences from FASTA file
+## -----------------------------------------------------------------------------
 genotype_info <- readDNAStringSet("data/Clones_MHC_ArGa_exon_20210319.fas")
-head(genotype_info)
+
+## show first six sequences
+## -----------------------------------------------------------------------------
+# head(genotype_info)
+#DNAStringSet object of length 6:
+ #   width seq                                                                  names               
+#[1]   270 AGGATTTCGTGTTCCAGTTTAAGGGCGAGTGCT...GAATGAGGAGAGAACGACCTTGCAGCGGCGAG AGF11008-C1-I_Klo...
+#[2]   270 AGGATTTCGTGTTCCAGTTTAAGGGCGAGTGCT...GAATGAGGGGAGAACGACCTTGCAGCGGCGAG AGF11008-C1-I_Klo...
+#[3]   270 AGGATTTCGTGTTCCAGTTTAAGGGCGAGTGCT...GAATGAGGAGAGAACGACCTTGCAGCGGCGAG AGF11008-C1-I_Klo...
+#[4]   270 AGGATTTCGTGTTCCAGTTTAAGGGCGAGTGCT...GAATGAGGAGAGAACGACCTTGCAGCGGCGAG AGF11008-C1-I_Klo...
+#[5]   270 AGGATTTCGTGTTCCAGTTTAAGGGCGAGTGCT...GAATGAGGAGAGAACGACCTTGCAGCGGCGAG AGF11008-C1-I_Klo...
+#[6]   270 AGGATTTCGTGTTCCAGTTTAAGGGCGAGTGCT...GAATGAGGAGAGAACGACCTTGCAGCGGCGAG AGF11008-C1-I_Klo...
 ```
 
 Read in the respective metadata for cloned individuals. 
 
 ```{r}
+## load meta data and reformat variables
+## -----------------------------------------------------------------------------
 metadata_df <- read.table(file   = "data/sample_list.txt", 
                           header = T) %>%
   mutate(
@@ -76,41 +190,44 @@ metadata_df <- read.table(file   = "data/sample_list.txt",
   arrange(real_id) %>%
   arrange(colony)
 
+## show head of data frame
+## -----------------------------------------------------------------------------
 head(metadata_df)
+## object structure
+## -----------------------------------------------------------------------------
 str(metadata_df)
-
 ```
-
 
 Subset metadata to handle mother-pup pair analysis more easily
 
 ```{r}
+## subset data frame to retrieve complete mother-pup pairs
+## -----------------------------------------------------------------------------
 metadata_df_pairs <- metadata_df[
   which(
     duplicated(metadata_df$family) | duplicated(metadata_df$family, fromLast = T) 
     == T)
   ,]
-
 ```
 
-Identify the names and index positions of unique sequences (only occuring 
+Identify the names and index positions of unique sequences (only occurring 
 once throughout the whole sequences data set) in the .fas-file
 
 ```{r}
-
+## Define function to identify sequences that are unique 
+## -----------------------------------------------------------------------------
 # Extracts names and index positions of a StringSet of aligned DNA sequences
-
-# raw_clones StringSet of aligned same length sequences
-# allowed.unique.seq Number of filtered sequences handled as unique
-# max.mismatch Allowed mismatches to identify unique sequences
-
-
+# raw_clones = StringSet of aligned same length sequences
+# allowed.unique.seq = Number of filtered sequences handled as unique
+# max.mismatch = Allowed mismatches to identify unique sequences
 get_unique_seqs <- function(raw_clones, allowed.unique.seq = 1, max.mismatch = 0){
-  
-  if (is.vector(raw_clones) != T){
+  ## coerce to vector
+  ## ---------------------------------------------------------------------------
+  if (is.vector(raw_clones) != T) {
     raw_clones <- as.vector(raw_clones)
   } 
-  # sort all instances that only occur once
+  ## sort all instances that only occur once
+  ## ---------------------------------------------------------------------------
   unique_indicator <- vector(length = length(raw_clones))
   for (i in seq_along(raw_clones)) {
     # unique_indicator[i] <- sum(match(raw_clones, raw_clones[i]), na.rm = T)
@@ -120,33 +237,36 @@ get_unique_seqs <- function(raw_clones, allowed.unique.seq = 1, max.mismatch = 0
                                , na.rm = T)    
   } #end for i
   
-  # index of unique seqs
+  ## index of unique seqs
+  ## ---------------------------------------------------------------------------
   index_unique_seq <- which(
     unique_indicator == allowed.unique.seq | 
       unique_indicator <= allowed.unique.seq
   )
   
-  # corresponding unique names
+  ## corresponding unique names
+  ## ---------------------------------------------------------------------------
   names_unique_seq <- names(raw_clones[index_unique_seq])
   
+  ## return output 
+  ## ---------------------------------------------------------------------------
   return(list(index_unique_seq = index_unique_seq, 
               names_unique_seq = names_unique_seq))
 } #end get_unique_seqs
-
 ```
 
-Within a DNAStringSet of multiple DNA alignments of same length sequences, 
-find unique sequences in correspondence to `get_unique_seqs` function filters 
+Within a DNAStringSet, comprising multiple DNA alignments of same length sequences, 
+find unique sequences (`get_unique_seqs` function) 
 and remove them from the input data. Use the updated input to create a data frame
 of identified alleles based on unique sequences found in multiple individuals.
-Alleles are named most to least abundant.
+Alleles are named from most to least abundant.
 
 ```{r}
-
-# data DNAStringSet of same length sequence alignment
-# allele_name Naming of alleles in data output
-# rm.unique Bool whether single sequence occurences are removed
-
+## Identify and name alleles
+## -----------------------------------------------------------------------------
+# data = DNAStringSet of same length sequence alignment
+# allele_name = Prefix of allele names
+# rm.unique = Bool whether single sequence occurrences are removed
 get_allele_info <- function(data, allele_name = "ArGa-DQB*", rm.unique = T){
   if (rm.unique == T) {
     unique_identifier <- get_unique_seqs(data, 
@@ -161,11 +281,10 @@ get_allele_info <- function(data, allele_name = "ArGa-DQB*", rm.unique = T){
     genotype_fas <- data
   }
   
-  
   # create data set with allele sequences
   allele_seq <- unique(genotype_fas)
 
-  # count occurences of identified alleles in the data
+  # count occurrences of identified alleles in the data
   allele_count <- as.vector(
     sapply(seq_along(allele_seq), function(i) 
       sum(match(genotype_fas, allele_seq[[i]]), na.rm = T))
@@ -188,16 +307,17 @@ get_allele_info <- function(data, allele_name = "ArGa-DQB*", rm.unique = T){
   
   return(out)
 } # end get_allele_info
-
 ```
 
-Function output is a list of two data frames. Split both to use further on
+The output of the function created above is a list of two data frames. Split both to use further on
 
 ```{r}
-# returning the output to a list decreases code run time
+## Get alleles 
+## -----------------------------------------------------------------------------
 out <- get_allele_info(genotype_info)
 
-# assignment is shorter than function calculations
+##  Split output 
+## -----------------------------------------------------------------------------
 alleles <- out[[1]]
 genotype_fas <- out[[2]]
 ```
@@ -206,15 +326,21 @@ Create data frame for each clone with an allele found more than once in the whol
 clone data .fas-file. 
 
 ```{r}
+## Data frame based on all clone sequences  
+## -----------------------------------------------------------------------------
 clone_allele_df <- as.data.frame(genotype_fas) %>%
   transmute(sequence = x) %>%
   rownames_to_column(var = "clone_var")
 
+## match clones to corresponding allele sequences
+## -----------------------------------------------------------------------------
 allele_index_in_df <- as.vector(
   sapply(
     clone_allele_df$sequence, 
     function(x) match(x, alleles$seq)))
 
+## Summarise  
+## -----------------------------------------------------------------------------
 clone_allele_df  %<>%
   transmute(.,
             id         = sapply(
@@ -248,14 +374,15 @@ clone_allele_df  %<>%
   ) %>%
   relocate(., sequence, .after = last_col())
 
-
-
-# update clone_allele_df with metadata information
+## Update clone_allele_df with metadata information
+## Summarise sequences 
+## -----------------------------------------------------------------------------
 # create index vector where sample ids correspond to the correct 
 # names in the metadata data.frame
 index <- match(as.character(clone_allele_df$id), metadata_df$clone_id)
 
 # rearrange columns in clone_allele_df based on 'index'
+# ------------------------------------------------------------------------------
 clone_allele_df <- clone_allele_df %>%
   mutate(
     id       = metadata_df$real_id[index],
@@ -264,7 +391,6 @@ clone_allele_df <- clone_allele_df %>%
     family   = metadata_df$family[index]
   ) %>%
   relocate(., sequence, .after = last_col())
-
 clone_allele_df  %<>% arrange(., variant_no)
 
 # clone_allele_df
@@ -273,18 +399,13 @@ clone_allele_df  %<>% arrange(., variant_no)
 # $ allele          : allele as name
 # $ variant_no      : allele as number
 # $ variant_count   : allele total count
-# $ variant_counter : allele counter; 1:last number of occurence per allele
+# $ variant_counter : allele counter; 1:last number of occurrence per allele
 # $ colony          : colony tag
 # $ maturity        : age by maturity, either mother (M) or pup (P)
 # $ sequence        : MHC DQB class II exon sequence of clone_var
-
-
-
-
-
 ```
 
-`clone_allele_df` has info for clone variants for 56 sample individuals.
+`clone_allele_df` contains information for clone variants for 56 sample individuals.
 Data frame structure includes original DNA sample, allele name, stratum data for 
 allele names and individual meta data corresponding to `metadata_df`.
 
@@ -296,7 +417,8 @@ Create a suitable data frame for a heatmap that contains allele names,
 sample ids and the respective number an allele occurs in sample id
 
 ```{r}
-
+## Summarise alleles 
+## -----------------------------------------------------------------------------
 allele_summary <- matrix(nrow = length(unique(clone_allele_df$id)),
                          ncol = length(unique(clone_allele_df$allele))) %>%
   `rownames<-`(., as.character(unique(clone_allele_df$id))) %>%
@@ -306,8 +428,10 @@ allele_summary <- matrix(nrow = length(unique(clone_allele_df$id)),
         clone_allele_df$allele), 
       numeric = T)))
 
-# fill matrix with info on which and how many alleles are found in the 
-# clones for each individual fur seal
+## Fill matrix with info on which and how many alleles are found in the 
+## clones for each individual fur seal
+## Summarise sequences 
+## -----------------------------------------------------------------------------
 for (i in seq_along(unique(clone_allele_df$id))) {
   alleles_in_id <- summary(
     clone_allele_df$allele[clone_allele_df$id == unique(clone_allele_df$id)[i]]
@@ -316,8 +440,8 @@ for (i in seq_along(unique(clone_allele_df$id))) {
                                                 numeric = T)]
 }
 
-# convert to data.frame and create a "tidy" version, 
-# ggplot and tidyverse can handle easily
+## convert to data.frame and create a "tidy" version
+## -----------------------------------------------------------------------------
 allele_summary %<>% 
   t() %>%
   as.data.frame() %>%
@@ -353,14 +477,20 @@ allele_summaryX <- allele_summaryX[allele_summaryX$alleles %in%
                                      levels(allele_summaryX$alleles)[1:19],]
 ```
 
-Create data.frame with genotype information
+Create data.frame with genotype information based on 19 alleles
 
 ```{r}
+## Retrieve genotypes
+## -----------------------------------------------------------------------------
 clone_genotype_df <- allele_summary[
   allele_summary$alleles %in% levels(allele_summary$alleles)[1:19],]
 
+## Eliminate alleles that were not scored in a given individual
+## -----------------------------------------------------------------------------
 clone_genotype_df <- clone_genotype_df[which(clone_genotype_df$counts != 0),]
 
+## Define small helper function 
+## -----------------------------------------------------------------------------
 f1 <- function(x){
   length(
     na.omit(
@@ -391,19 +521,17 @@ clone_genotype_df  %<>%
   arrange(., desc(variant_counter))
 ```
 
-List for figure storing
+Create list for figure storing
 
 ```{r}
-
 figures <- vector(mode = "list")
-
 ```
 
 ## Plot clone sequence frequencies
 
 ```{r}
-
-# index to remove putative artefacts
+## index to remove putative artefacts
+## -----------------------------------------------------------------------------
 figures[[1]] <- ggplot(clone_allele_df[1:771,], 
                        aes(x = variant_no, 
                            group = dplyr::desc(variant_counter), 
@@ -451,7 +579,6 @@ figures[[1]] <- ggplot(clone_allele_df[1:771,],
         plot.margin = unit(c(0.5,0.5,0.5,0,5), "cm")
   )
 names(figures)[1] <- "allele_freq_hist"
-
 ```
 
 ```{r echo=FALSE}
@@ -461,14 +588,14 @@ figures[[1]]
 ## Plot genotype heatmap of mother-pup pairs
 
 ```{r eval=TRUE, include=TRUE, echo=TRUE}
-
-# plot multiple small heatmaps for single pairs
+## plot multiple small heatmaps for single mum-pup pairs
+## ----------------------------------------------------------------------------- 
 sep_heat <- function(x, color = "blue"){ 
   df <- allele_summaryX[which(allele_summaryX$family == x),]
   gg <- ggplot( data = df,
                 aes(x = alleles,
                     y = sample_id, 
-                    fill = log(counts+1))) + 
+                    fill = log(counts + 1))) + 
     geom_tile() + 
     coord_fixed(ratio = 0.6) +
     scale_fill_viridis_c(limits = c(0, 3.5),
@@ -505,20 +632,23 @@ vec <- unique(allele_summaryX$family)
 vec_ssb <- unique(allele_summaryX$family[allele_summaryX$colony == "SSB"])
 vec_fwb <- unique(allele_summaryX$family[allele_summaryX$colony == "FWB"])
 
-# create two plot lists for small heatmaps to separate the two colonies
+## create two plot lists for small heatmaps to separate the two colonies
+## -----------------------------------------------------------------------------
 plots_ssb <- lapply(vec_ssb, sep_heat, color = "white")
 plots_fwb <- lapply(vec_fwb, sep_heat, color = "white")
 
-# merge in order
+## merge in order
+## -----------------------------------------------------------------------------
 plot_list <- c(plots_ssb, plots_fwb)
 
-# plot heatmap for last individual with x axis
+## plot heatmap for last individual with x axis
+## -----------------------------------------------------------------------------
 l <- length(vec)
 plot_list[[l]] <- ggplot(
   data = allele_summaryX[which(allele_summaryX$family == vec[l]),],
   aes(x = alleles,
       y = sample_id, 
-      fill = log(counts+1))) + 
+      fill = log(counts + 1))) + 
   geom_tile() + 
   coord_fixed(ratio = 0.6) +
   scale_fill_viridis_c(name = "No. of\nclones",
@@ -553,12 +683,11 @@ plot_list[[l]] <- ggplot(
   )
 
 # increase headspace for first list element
+## -----------------------------------------------------------------------------
 plot_list[[1]] <- plot_list[[1]] + theme(plot.margin = unit(c(10,0,0,0), "mm"))
-
 figures[[2]] <- egg::ggarrange(plots = plot_list, ncol = 1)
 
 names(figures)[2] <- "clone_heatmap"
-
 ```
 
 
@@ -572,31 +701,33 @@ Start with converting genotypes of Antarctic fur seal based on 41 microsatellite
 loci.
 
 ```{r}
-
+## read microsat data
+## -----------------------------------------------------------------------------
 msats_gp <- read.table(file = "data/msats_genind.txt", sep = "\t") 
 
 # `df2genind` needs input for pop argument
 sites_msats <- msats_gp[,1]
 
-# only data with genotype info can be converted to genind. Keep original data frame
+## only data with genotype info can be converted to genind. Keep original data frame
+## -----------------------------------------------------------------------------
 msats_gen <- msats_gp[,-1]
 msats_gen <- df2genind(msats_gen, 
                        ploidy = 2, 
                        sep = "/", # alleles are separated with "/"
                        NA.char = NA, # missing loci are NA
                        pop = sites_msats)
-
 ```
 
-Convert MHC DQB class 2 genotypes by creating the `genind` object first.
+Convert MHC class II DQB exon 2 genotypes by creating the `genind` object first.
 
 ```{r}
-
-# exclude putative artefacts from main data.frame
+## exclude putative artefacts from main data.frame
+## -----------------------------------------------------------------------------
 clone_allele_df <- clone_allele_df[1:771,] %>%
   mutate(., variant_no = str_pad(variant_no, 2, pad = "0"))
 
-# create a list of genotypes
+## create a list of genotypes
+## -----------------------------------------------------------------------------
 called_clones <- vector(mode = "list", length = 1)
 called_clones[[1]] <- seq_along(unlist(attributes(clone_allele_df$id)[1]))
 names(called_clones[[1]]) <- unlist(attributes(clone_allele_df$id)[1])
@@ -614,10 +745,10 @@ called_clones <- lapply(id, function(x)
 
 # filter out individuals that do not fit the presumed ploidy of the genotyped locus
 # by deleting the least likely allele as we assume diploidy
+## -----------------------------------------------------------------------------
 ploidy_mismatches <- which(lapply(called_clones, length) > 2)
 called_clones[ploidy_mismatches] <- lapply(called_clones[ploidy_mismatches], 
                                            function(x) x[1:2])
-
 
 called_clones <- lapply(called_clones, function(x){
   c(x[1], tail(x,1))
@@ -636,7 +767,8 @@ clone_df <- lapply(called_clones, function(x)
   t(.)
 
 
-# build data frame with additional info for strata in genind class object
+## build data frame with additional info for strata in genind class object
+## -----------------------------------------------------------------------------
 n <- rownames(clone_df)
 ind_n <- match(n,clone_genotype_df$sample_id)
 strata_df <- data.frame(
@@ -646,17 +778,18 @@ strata_df <- data.frame(
   fmly = clone_genotype_df$family[ind_n])
 
 
-# coerce to genind
+## coerce to genind
+## -----------------------------------------------------------------------------
 clone_gen <- df2genind(clone_df, 
                           ploidy = 2, 
                           sep = "/",
                           pop = strata_df$pops,
                           strata = strata_df)
 
-# Already saved. 
+## Save as txt file 
+## -----------------------------------------------------------------------------
 # save.df <- genind2df(clone_gen, sep = "/")
 # write.table(save.df, file = "data/clone_gen.txt", sep = "\t")
-
 ```
 
 We can use the resulting object as is and save it as a data frame that is easily 
@@ -664,7 +797,8 @@ convertible to a `genind` for future use.
 Load in MHC DQB class 2 genotype by data frame
 
 ```{r}
-
+## read MHC class II DQB exon 2 genotyping data
+## -----------------------------------------------------------------------------
 clone_gp <- read.table(file = "data/clone_genind.txt", sep = "\t")
 
 # `df2genind` needs input for pop argument
@@ -689,26 +823,25 @@ clone_gen <- df2genind(clone_gen,
 Calculate fixation index after Weir & Cockerham (1984)
 
 ```{r}
-
 (fst_msats_gen <- genet.dist(msats_gen, method = "WC"))
 (fst_clone_gen <- genet.dist(clone_gen, method = "WC"))
-
 ```
 
 Permute to get *p*-values
   
 Permutations are inefficient, thus lowered for demonstration. 
-To get similar results as depicted in the publication, run
+To get similar results as depicted in the publication, run the following code:
 
     set.seed(111)
     perm.fst(msats_gen, nperm = 9999)
     perm.fst(clone_gen, nperm = 9999)
 
 ```{r}
-# `data` Formal class genind to be permuted for Fst
-# `nperm` number of Fst permutations
-# `resamples` number of data permutations
-
+## Create function to run permutations 
+## -----------------------------------------------------------------------------
+# `data` = Formal class genind to be permuted for Fst
+# `nperm` = number of Fst permutations
+# `resamples`  = number of data permutations
 perm.fst <- function(data, nperm = 100, resamples = 50){
   x <- data
   df <- genind2df(x, sep = "/")
@@ -737,7 +870,7 @@ perm.fst <- function(data, nperm = 100, resamples = 50){
     sim = na.omit(sapply(1:nperm, 
                          function(i) mat.perm[i])), 
     obs = mat.obs, 
-    alter="greater" # ((# of permutations >= mat.obs) + 1) / (# of nperm +1)
+    alter = "greater" # ((# of permutations >= mat.obs) + 1) / (# of nperm +1)
     )
   
   return(test.rand)
@@ -745,9 +878,7 @@ perm.fst <- function(data, nperm = 100, resamples = 50){
 } # end perm.fst
 
 perm.fst(msats_gen)
-
 perm.fst(clone_gen)
-
 ```
 
 ### Private alleles per site
@@ -758,14 +889,11 @@ private_alleles(msats_gen) %>% apply(MARGIN = 1, FUN = sum)
 
 # mhc clones
 private_alleles(clone_gen) %>% apply(MARGIN = 1, FUN = sum)
-
-
 ```
 
 ### Allelic richness per site
 
 ```{r}
-
 # msats
 allelic.richness(genind2hierfstat(msats_gen))$Ar %>%
   apply(MARGIN = 2, FUN = mean) %>% 
@@ -777,6 +905,7 @@ allelic.richness(genind2hierfstat(clone_gen))$Ar %>%
   round(digits = 3)
 
 ```
+
 ### Summary of basic statistics per site per locus
 
 ```{r}
@@ -785,43 +914,37 @@ msats_gen_stats <- basic.stats(msats_gen, diploid = TRUE)
 
 # mhc clones
 clone_gen_stats <- basic.stats(clone_gen, diploid = TRUE)
-
 ```
 
 
 ### Mean observed heterozygosity per site
-```{r}
 
+```{r}
 # msats
 apply(msats_gen_stats$Ho, MARGIN = 2, FUN = mean, na.rm = TRUE)
 
 # mhc clone
 apply(clone_gen_stats$Ho, MARGIN = 2, FUN = mean, na.rm = TRUE)
-
 ```
 
 ### Mean expected heterozygosity per site
 
 ```{r}
-
 # msats
 apply(msats_gen_stats$Hs, MARGIN = 2, FUN = mean, na.rm = TRUE)
 
 # mhc clones
 apply(clone_gen_stats$Hs, MARGIN = 2, FUN = mean, na.rm = TRUE)
-
 ```
 
 ### Inbreeding coefficient F<sub>IS</sub>
 
 ```{r}
-
 # msats
 apply(msats_gen_stats$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE)
 
 # mhc clones
 apply(clone_gen_stats$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE)
-
 ```
 
 ### Repeat analysis. Run mothers and pups separate
@@ -829,22 +952,19 @@ apply(clone_gen_stats$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE)
 #### Microsatellite data: Separate mother and pup data
 
 ```{r}
-
 df.sats <- genind2df(msats_gen, sep = "/")
 df.sats <- df.sats[match(metadata_df$real_id, rownames(df.sats)),]
 
-df.mom <- df.sats[which(metadata_df$maturity =="M"),] 
+df.mom <- df.sats[which(metadata_df$maturity == "M"),] 
 df.mom <- df2genind(df.mom[,-1], sep = "/", pop = df.mom[,1])
 
-df.pup <- df.sats[which(metadata_df$maturity =="P"),]
+df.pup <- df.sats[which(metadata_df$maturity == "P"),]
 df.pup <- df2genind(df.pup[,-1], sep = "/", pop = df.pup[,1])
-
 ```
 
 #### Microsatellite data: Mothers
 
 ```{r}
-
 private_alleles(df.mom) %>% apply(MARGIN = 1, FUN = sum)
 
 # allelic richness per site (per locus)
@@ -866,13 +986,11 @@ apply(df.mom_stats$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE)
 
 # pairwise F_st
 genet.dist(df.mom, method = "WC")
-
 ```
 
 #### Microsatellite data: Pups
 
 ```{r}
-
 # private alleles per site (per locus)
 private_alleles(df.pup) %>% apply(MARGIN = 1, FUN = sum)
 
@@ -895,22 +1013,19 @@ apply(df.pup_stats$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE)
 
 # pairwise F_st
 genet.dist(df.pup, method = "WC")
-
 ```
 
 #### MHC DQB class II data: Separate mother and pup data
 
 ```{r}
-
 df.clone <- genind2df(clone_gen, sep = "/")
 df.clone <- df.clone[match(metadata_df$real_id, rownames(df.clone)),]
 
-df.mom <- df.clone[which(metadata_df$maturity =="M"),] 
+df.mom <- df.clone[which(metadata_df$maturity == "M"),] 
 df.mom <- df2genind(as.matrix(df.mom[,-1]), sep = "/", pop = df.mom[,1])
 
-df.pup <- df.clone[which(metadata_df$maturity =="P"),]
+df.pup <- df.clone[which(metadata_df$maturity == "P"),]
 df.pup <- df2genind(as.matrix(df.pup[,-1]), sep = "/", pop = df.pup[,1])
-
 ```
 
 #### MHC DQB class II data: Mothers
@@ -943,7 +1058,6 @@ genet.dist(df.mom, method = "WC")
 #### MHC DQB class II data: Pups
 
 ```{r}
-
 # private alleles per site (per locus)
 private_alleles(df.pup) %>% apply(MARGIN = 1, FUN = sum)
 
@@ -966,14 +1080,12 @@ apply(df.pup_stats$Fis, MARGIN = 2, FUN = mean, na.rm = TRUE)
 
 # pairwise F_st
 genet.dist(df.pup, method = "WC")
-
-
 ```
 
 ## Correlate genetic diversity
 
 Correlate measurements for genetic diversity of 41 microsatellite loci and one
-mhc dqb II locus
+MHC class II DQB exon 2 locus
 
 ### Generate genetic diversity estimates
 
@@ -982,17 +1094,14 @@ For this study, we base genetic diversity on pairwise genetic distance measureme
 #### Absolute genetic distance: Number of allelic differences in Microsatellite data
 
 ```{r}
-
 msats_gen.abs <- poppr::diss.dist(msats_gen) %>% 
   # create distance matrix
   as.matrix()
-
 ```
 
 #### UniFrac distance for MHC DQB II data
 
 ```{r}
-
 # remove putative artefacts from clone info table
 clone_allele_df <- clone_allele_df[1:771,]
 
@@ -1062,58 +1171,56 @@ set.seed(111)
 
 #### Plot genetic distance correlation
 
-Vectorize distance matrices
+Vectorize distance matrices based on microsatellite (msats_dist) and MHC (MHC_dist) genotypes:
 
 ```{r}
-
+## Msats
+## -----------------------------------------------------------------------------
 msats_gen.abs[upper.tri(msats_gen.abs, diag = T)] <- NA
-a <- msats_gen.abs %>% as.vector() %>% na.omit()
+msats_dist <- msats_gen.abs %>% as.vector() %>% na.omit()
 
+## MHC
+## -----------------------------------------------------------------------------
 clone_gen.ufrac[upper.tri(clone_gen.ufrac)] <- NA
 diag(clone_gen.ufrac) <- NA
-b <- clone_gen.ufrac %>% as.vector() %>% na.omit()
+MHC_dist <- clone_gen.ufrac %>% as.vector() %>% na.omit()
 
-df <- cbind(a,b) %>% as.data.frame()
-
+## combine in one data frame
+## -----------------------------------------------------------------------------
+df <- cbind(msats_dist, MHC_dist) %>% as.data.frame()
 ```
 
-Generate linear model
+Generate linear model to test for correlation 
 
 ```{r}
-
-model <- lm(b ~ a)
-m<- summary(model)
-m
-
-
+model <- lm(MHC_dist ~ msats_dist) 
+(m <- summary(model))
 ```
 
 Plot correlation of distance matrices
 
 ```{r}
-(
-  figures[[3]] <- ggplot(df, aes(b,a)) +
-  geom_point() +
-    # geom_jitter(height = 0.002, width = 0.07) +
-  geom_smooth(method = "lm", 
-              se = T, 
-              color = "orange") +
-    scale_y_continuous(name   = "Pairwise microsatellite\nallele sharing",
-                       limits = c(20, 70),
-                       expand = c(0,0)) +
-    scale_x_continuous(name   = "Pairwise MHC distances") +
-    annotate(geom = "text", x = 0.03, y = 69,
-             label ="italic(R²)==0.01", parse = T) +
-    theme_bw(base_size = 16) +
-    theme(
-      panel.grid.minor = element_blank(),
-      panel.grid.major = element_blank(),
-      plot.margin = unit(c(0.5,0.5,0.5,0,5), "cm"),
-      axis.title = element_text(color = "black", 
-                                margin = margin(10,10,20,10))
-    )
-)
-
+(figures[[3]] <- ggplot(df, aes(MHC_dist, msats_dist)) +
+   geom_point() +
+   # geom_jitter(height = 0.002, width = 0.07) +
+   geom_smooth(method = "lm", 
+               formula = "y ~ x",
+               se = T, 
+               color = "orange") +
+   scale_y_continuous(name   = "Pairwise microsatellite\nallele sharing",
+                      limits = c(20, 70),
+                      expand = c(0,0)) +
+   scale_x_continuous(name   = "Pairwise MHC distances") +
+   annotate(geom = "text", x = 0.03, y = 69,
+            label = "italic(R²)==0.01", parse = T) +
+   theme_bw(base_size = 16) +
+   theme(
+     panel.grid.minor = element_blank(),
+     panel.grid.major = element_blank(),
+     plot.margin = unit(c(0.5,0.5,0.5,0,5), "cm"),
+     axis.title = element_text(color = "black", 
+                               margin = margin(10,10,20,10))
+   ))
 names(figures)[3] <- "mantel_plot"
 ```
 
@@ -1122,72 +1229,73 @@ names(figures)[3] <- "mantel_plot"
 Calculate standardized multilocus heterozygosity in `inbreedR`
 
 ```{r}
-
+## read msats data 
+## -----------------------------------------------------------------------------
 df <- read.table("data/msats/msats_genotypes_inbreedR.txt", sep = "\t") %>%
   # convert to inbreedR format
   convert_raw()
 
-# check table
+## check formatting
+## -----------------------------------------------------------------------------
 check_data(df)
 
-# standardized multi loc het
+## Compute standardized multilocus heterozygosity
+## -----------------------------------------------------------------------------
 sMLH_res <- sMLH(df)
 
 # histogram for interested
 # hist(sMLH_res)
-
 ```
 
 Convert mhc data into categorical hom/het values
 
 ```{r}
-
+## Load MHC data
+## -----------------------------------------------------------------------------
 clones_het <- read.table(file = "data/clone_mhc_het.txt", sep = "\t")
 
-# make rownames consistent
+## make rownames consistent
+## -----------------------------------------------------------------------------
 n <- names(sMLH_res)
 n_c <- rownames(clones_het)
 n_in <- match(n, n_c)
 clones_het <- clones_het[n_in,]
-
 ```
 
 Create data frame to ease modelling and plotting
 
 ```{r}
-
 corr_het <- cbind(sMLH_res, clones_het$het) %>%
   `colnames<-`(c("smlh","mhc_het")) %>%
   as.data.frame()
-
 ```
 
 Create glm
 
 ```{r}
-
-# glm with binomially distributed data
+## glm with binomially distributed data
+## -----------------------------------------------------------------------------
 het_glm <- glm(cbind(corr_het$mhc_het, 1-corr_het$mhc_het) ~ corr_het$smlh, 
                family = "binomial")
 
 summary(het_glm)
 
+
 anova(het_glm, test = "Chisq") # test glm; chi square due to binomial data
 
-chi_glm <- qchisq(1-0.1551, df = 54, lower.tail = T)
-
+chi_glm <- qchisq(1 - 0.1551, df = 54, lower.tail = T)
 ```
 
-Plot heterozygosity correlation
+Plot heterozygosity correlation (smlh on mhc)
 
 ```{r eval=TRUE, include=TRUE, echo=TRUE}
-
 figures[[4]] <- ggplot(data = corr_het, 
                       aes(y = smlh, 
                           x = mhc_het)) + 
   geom_jitter(height = 0.02, 
               width = 0.07) +
   geom_smooth(method = "glm", 
+              formula = "y ~ x",
               color = "orange", 
               alpha = 0.4) +
   ylab("sMLH") +
@@ -1202,7 +1310,6 @@ figures[[4]] <- ggplot(data = corr_het,
 names(figures)[4] <- "het_corr_plot"
 
 figures[4]
-
 ```
 
 ## Allele detection curves and Hamming mismatches
@@ -1212,10 +1319,9 @@ figures[4]
 Calculate Hamming distances, simulate allele detection
 
 ```{r}
-
 ## calculate pairwise difference to primer sequences.
 ## Optional, account for variable alignment length
-## 
+## -----------------------------------------------------------------------------
 Hamming.dist <- function(seq, ref, method = c("rel", "abs")) {
   method <- match.arg(method)
   # discard gaps and binding N
@@ -1238,6 +1344,7 @@ Hamming.dist <- function(seq, ref, method = c("rel", "abs")) {
 }# end Hamming.dist
 
 ## Pick alleles based on hamming value threshold
+## -----------------------------------------------------------------------------
 simulate_hoelzel <- function(data, n = 1:length(data), bs = 999, 
                              hamming = hamming_values, mismatch = 1) {
   
@@ -1310,18 +1417,17 @@ summary_stats <- function(data = NULL,
   
   return(datac)
 }
-
 ```
 
 ### Generate data for nucleotide mistmaches at PBR
 
 ```{r}
-
 ## Putative alleles Cloning sequences (full exon, 267bp)
+## -----------------------------------------------------------------------------
 Clones <- ape::read.dna("data/ArGa_DQB-Hoelzel-primer-clones_20211027.fas",
                          format = "fasta") %>%
   as.character() %>%
-  apply(.,2, toupper) %>% ## append a dummy colum
+  apply(.,2, toupper) %>% ## append a dummy column
   cbind(., "-")
 # ------------------------------------------------------------------------------
 
@@ -1344,13 +1450,11 @@ Clones_glm_df <- data.frame(mismatches = Clones_hd$x,
                                         46, 18, 17, 17, 14, 13, 13, 12, 9, 7))
 ## Set alleles characterised in Hoelzel et al to 1
 Clones_glm_df$binom[c(6, 17)] <- 1 
-
 ```
 
 ### Plot mismatches
 
 ```{r}
-
 set.seed(98)
 figures[[5]] <- ggplot(Clones_glm_df, 
                        aes(x = as.factor(binom), 
@@ -1381,17 +1485,18 @@ figures[[5]] <- ggplot(Clones_glm_df,
           legend.position = "none") 
 
 names(figures)[5] <- "hamming_boxplot"
-
 ```
 
 ### Allele detection on simulated primer-mismatches
 
 ```{r}
-
+## Load genotypes
+## -----------------------------------------------------------------------------
 load("data/called_clones-20211027.RData")
 clone_genotypes <- called_clones
 
-## Simulate datasaets
+## Simulate datasets
+## -----------------------------------------------------------------------------
 clone_simul <- lapply(0:max(Clones_hd), function(x) {
   simulate_hoelzel(data = clone_genotypes[["clone_exon"]],
                    bs = 99,
@@ -1412,7 +1517,6 @@ clone_summary <- summary_stats(clone_simul,
 ## add number of Hoelzel et al., 1999
 clone_summary[nrow(clone_summary) + 1, ] <- c(13, 99, 0, 4, 0, 0, 0) 
 clone_summary$x <- as.numeric(as.character(clone_summary$x))
-
 ```
 
 ### Allele detection curves
@@ -1420,8 +1524,7 @@ clone_summary$x <- as.numeric(as.character(clone_summary$x))
 Plot size does not match size of publication figure
 
 ```{r}
-
-hoelzel.exp <- c(expression("Hoelzel " *italic("et al.")))
+hoelzel.exp <- c(expression("Hoelzel " * italic("et al.")))
 figures[[6]] <- ggplot(clone_summary, aes(x,y)) +
   geom_linerange(ymin = clone_summary$y - clone_summary$sd, 
                  ymax = clone_summary$y + clone_summary$sd,
@@ -1470,30 +1573,23 @@ addSmallLegend <- function(myPlot, pointSize = 0.5, textSize = 3, spaceLegend = 
 figures[[6]] <- addSmallLegend(figures[[6]], pointSize = 3, textSize = 14)
 
 names(figures)[6] <- "allele_detection_curve"
-
 ```
 
-### Plot as panel
+### Plot as multi-panel figure
 
 ```{r}
-
 ggpubr::ggarrange(figures[[5]], figures[[6]], nrow = 2, ncol = 1, align = "v")
-
 ```
 
 ## Session information
 
 ```{r}
-
 sessionInfo()
-
 ```
 
 ## References
 
 ```{r eval=FALSE, include=FALSE, message=FALSE, warning=FALSE}
-
 # create bibtex with references
 refs <- knitr::write_bib(x = .packages(), file = "documents/r-packages.bib")
-
 ```
