@@ -1200,27 +1200,33 @@ model <- lm(MHC_dist ~ msats_dist)
 Plot correlation of distance matrices
 
 ```{r}
-(figures[[3]] <- ggplot(df, aes(MHC_dist, msats_dist)) +
+figures[[3]] <- ggplot(df, aes(MHC_dist, msats_dist)) +
    geom_point() +
    # geom_jitter(height = 0.002, width = 0.07) +
    geom_smooth(method = "lm", 
                formula = "y ~ x",
-               se = T, 
-               color = "orange") +
+               se = T,
+               color = "#fde725ff",
+               fill = "#29af7fff",
+               alpha = 0.38,
+               size = 1.5) +
    scale_y_continuous(name   = "Pairwise microsatellite\nallele sharing",
                       limits = c(20, 70),
                       expand = c(0,0)) +
    scale_x_continuous(name   = "Pairwise MHC distances") +
-   annotate(geom = "text", x = 0.03, y = 69,
-            label = "italic(R²)==0.01", parse = T) +
-   theme_bw(base_size = 16) +
+   # annotate(geom = "text", x = 0.05, y = 69,
+   #          label = "italic(R²)==0.01", parse = T) +
+   theme_classic(base_size = 16,
+                 base_line_size = 1,
+                 base_rect_size = 1) +
    theme(
      panel.grid.minor = element_blank(),
      panel.grid.major = element_blank(),
      plot.margin = unit(c(0.5,0.5,0.5,0,5), "cm"),
      axis.title = element_text(color = "black", 
-                               margin = margin(10,10,20,10))
-   ))
+                               margin = margin(10,10,20,10)),
+     axis.text = element_text(color = "black")
+   )
 names(figures)[3] <- "mantel_plot"
 ```
 
@@ -1292,25 +1298,45 @@ Plot heterozygosity correlation (smlh on mhc)
 figures[[4]] <- ggplot(data = corr_het, 
                       aes(y = smlh, 
                           x = mhc_het)) + 
-  geom_jitter(height = 0.02, 
-              width = 0.07) +
+  geom_jitter(height = 0.02,
+              width = 0.07,
+              size = 4) +
   geom_smooth(method = "glm", 
               formula = "y ~ x",
-              color = "orange", 
-              alpha = 0.4) +
+              color = "#fde725ff",
+              fill = "#29af7fff",
+              alpha = 0.38,
+              size = 2) +
   ylab("sMLH") +
-  scale_x_continuous(name = "MHC-DQBII\nheterozygosity",
+  scale_x_continuous(name = "MHC heterozygosity",
                      breaks = c(0,1),
-                     labels = c("hom", "het")) +
-  theme_light(base_size = 15) +
+                     labels = c("homozygote", "heterozygote")) +
+  theme_classic(base_size = 16,
+                  base_line_size = 1,
+                  base_rect_size = 1) +
   theme(
-    panel.grid = element_blank() 
+    # panel.background = element_rect(color = "black", size = 1.5),
+    panel.grid = element_blank(),
+    axis.text = element_text(colour = "black")
   )
 
 names(figures)[4] <- "het_corr_plot"
-
-figures[4]
 ```
+
+# Multipanel figure of MHC heterozygosity and diversity correlation
+
+```{r}
+
+
+mhc_het.p <- figures[[4]] + labs(tag = "A")
+mhc_div.p <- figures[[3]] + labs(tag = "B")
+
+(ggpubr::ggarrange(mhc_het.p, mhc_div.p, nrow = 2, ncol = 1, align = "v"))
+
+# ggsave("graphics/mhc_het_div_panel.png", dpi = 300, width = 6, height = 9)
+
+```
+
 
 ## Allele detection curves and Hamming mismatches
 
