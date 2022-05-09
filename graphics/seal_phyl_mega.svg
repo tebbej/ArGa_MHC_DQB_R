@@ -39,12 +39,12 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:window-width="1920"
-     inkscape:window-height="1017"
+     inkscape:window-height="1057"
      id="namedview1406"
      showgrid="false"
-     inkscape:zoom="0.6112718"
-     inkscape:cx="376.69647"
-     inkscape:cy="548.13154"
+     inkscape:zoom="0.86446887"
+     inkscape:cx="236.99114"
+     inkscape:cy="552.27654"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -52,11 +52,10 @@
   <text
      x="490"
      y="249"
-     transform="rotate(270 490,249)"
-     fill="#000000"
+     transform="rotate(-90,490,249)"
      font-size="15"
-     font-family="Arial"
-     id="text4">XX000001.1 ArGa-DQB*01</text>
+     id="text4"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060886.1 ArGa-DQB*01</text>
   <line
      x1="485"
      y1="406"
@@ -69,11 +68,10 @@
   <text
      x="518"
      y="250"
-     transform="rotate(276 518,250)"
-     fill="#000000"
+     transform="rotate(-84,518,250)"
      font-size="15"
-     font-family="Arial"
-     id="text8">XX000007.1 ArGa-DQB*07</text>
+     id="text8"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060892.1 ArGa-DQB*07</text>
   <line
      x1="499"
      y1="407"
@@ -107,11 +105,10 @@
   <text
      x="547"
      y="255"
-     transform="rotate(281 547,255)"
-     fill="#000000"
+     transform="rotate(-79,547,255)"
      font-size="15"
-     font-family="Arial"
-     id="text18">XX000016.1 ArGa-DQB*16</text>
+     id="text18"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060901.1 ArGa-DQB*16</text>
   <line
      x1="512"
      y1="412"
@@ -145,11 +142,10 @@
   <text
      x="574"
      y="263"
-     transform="rotate(286 574,263)"
-     fill="#000000"
+     transform="rotate(-74,574,263)"
      font-size="15"
-     font-family="Arial"
-     id="text28">XX000015.1 ArGa-DQB*15</text>
+     id="text28"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060900.1 ArGa-DQB*15</text>
   <line
      x1="523"
      y1="419"
@@ -390,11 +386,10 @@
   <text
      x="731"
      y="379"
-     transform="rotate(325 731,379)"
-     fill="#000000"
+     transform="rotate(-35,731,379)"
      font-size="15"
-     font-family="Arial"
-     id="text92">XX000002.1 ArGa-DQB*02</text>
+     id="text92"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060887.1 ArGa-DQB*02</text>
   <line
      x1="602"
      y1="465"
@@ -407,11 +402,10 @@
   <text
      x="746"
      y="404"
-     transform="rotate(330 746,404)"
-     fill="#000000"
+     transform="rotate(-30,746,404)"
      font-size="15"
-     font-family="Arial"
-     id="text96">XX000011.1 ArGa-DQB*11</text>
+     id="text96"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060896.1 ArGa-DQB*11</text>
   <line
      x1="610"
      y1="476"
@@ -445,11 +439,10 @@
   <text
      x="759"
      y="430"
-     transform="rotate(336 759,430)"
-     fill="#000000"
+     transform="rotate(-24,759,430)"
      font-size="15"
-     font-family="Arial"
-     id="text106">XX000009.1 ArGa-DQB*09</text>
+     id="text106"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060894.1 ArGa-DQB*09</text>
   <line
      x1="602"
      y1="494"
@@ -483,11 +476,10 @@
   <text
      x="769"
      y="455"
-     transform="rotate(341 769,455)"
-     fill="#000000"
+     transform="rotate(-19,769,455)"
      font-size="15"
-     font-family="Arial"
-     id="text116">XX000013.1 ArGa-DQB*13</text>
+     id="text116"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060898.1 ArGa-DQB*13</text>
   <line
      x1="603"
      y1="506"
@@ -821,11 +813,10 @@
   <text
      x="723"
      y="727"
-     transform="rotate(396 723,727)"
-     fill="#000000"
+     transform="rotate(36,723,727)"
      font-size="15"
-     font-family="Arial"
-     id="text204">XX000005.1 ArGa-DQB*05</text>
+     id="text204"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060890.1 ArGa-DQB*05</text>
   <line
      x1="626"
      y1="649"
@@ -914,11 +905,10 @@
   <text
      x="662"
      y="786"
-     transform="rotate(413 662,786)"
-     fill="#000000"
+     transform="rotate(53,662,786)"
      font-size="15"
-     font-family="Arial"
-     id="text228">XX000014.1 ArGa-DQB*14</text>
+     id="text228"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060899.1 ArGa-DQB*14</text>
   <line
      x1="580"
      y1="670"
@@ -952,11 +942,10 @@
   <text
      x="638"
      y="802"
-     transform="rotate(418 638,802)"
-     fill="#000000"
+     transform="rotate(58,638,802)"
      font-size="15"
-     font-family="Arial"
-     id="text238">XX000012.1 ArGa-DQB*12</text>
+     id="text238"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060897.1 ArGa-DQB*12</text>
   <line
      x1="565"
      y1="676"
@@ -990,11 +979,10 @@
   <text
      x="614"
      y="816"
-     transform="rotate(424 614,816)"
-     fill="#000000"
+     transform="rotate(64,614,816)"
      font-size="15"
-     font-family="Arial"
-     id="text248">XX000008.1 ArGa-DQB*08</text>
+     id="text248"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060893.1 ArGa-DQB*08</text>
   <line
      x1="544"
      y1="664"
@@ -1066,11 +1054,10 @@
   <text
      x="561"
      y="836"
-     transform="rotate(434 561,836)"
-     fill="#000000"
+     transform="rotate(74,561,836)"
      font-size="15"
-     font-family="Arial"
-     id="text268">XX000006.1 ArGa-DQB*06</text>
+     id="text268"
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060891.1 ArGa-DQB*06</text>
   <line
      x1="525"
      y1="689"
@@ -1141,7 +1128,7 @@
      transform="rotate(91)"
      font-size="15"
      id="text286"
-     style="font-size:15px;font-family:Arial;fill:#000000">XX000019.1 ArGa-DQB*19</text>
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060904.1 ArGa-DQB*19</text>
   <line
      x1="483"
      y1="672"
@@ -1303,7 +1290,7 @@
      transform="rotate(-62)"
      font-size="15"
      id="text334"
-     style="font-size:15px;font-family:Arial;fill:#000000">XX000018.1 ArGa-DQB*18</text>
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060903.1 ArGa-DQB*18</text>
   <line
      x1="409"
      y1="687"
@@ -1340,7 +1327,7 @@
      transform="rotate(-56)"
      font-size="15"
      id="text344"
-     style="font-size:15px;font-family:Arial;fill:#000000">XX000004.1 ArGa-DQB*04</text>
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060889.1 ArGa-DQB*04</text>
   <line
      x1="403"
      y1="670"
@@ -1467,7 +1454,7 @@
      transform="rotate(-34)"
      font-size="15"
      id="text378"
-     style="font-size:15px;font-family:Arial;fill:#000000">XX000010.1 ArGa-DQB*10</text>
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060895.1 ArGa-DQB*10</text>
   <line
      x1="366"
      y1="627"
@@ -1483,7 +1470,7 @@
      transform="rotate(-29)"
      font-size="15"
      id="text382"
-     style="font-size:15px;font-family:Arial;fill:#000000">XX000017.1 ArGa-DQB*17</text>
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060902.1 ArGa-DQB*17</text>
   <line
      x1="357"
      y1="617"
@@ -2670,14 +2657,6 @@
      fill="#FFFFFF"
      stroke="#000000"
      id="ellipse694" />
-  <text
-     x="490"
-     y="249"
-     transform="rotate(270 490,249)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text704">XX000001.1 ArGa-DQB*01</text>
   <line
      x1="485"
      y1="406"
@@ -2687,14 +2666,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line706" />
-  <text
-     x="518"
-     y="250"
-     transform="rotate(276 518,250)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text708">XX000007.1 ArGa-DQB*07</text>
   <line
      x1="499"
      y1="407"
@@ -2725,14 +2696,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line716" />
-  <text
-     x="547"
-     y="255"
-     transform="rotate(281 547,255)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text718">XX000016.1 ArGa-DQB*16</text>
   <line
      x1="512"
      y1="412"
@@ -2763,14 +2726,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line726" />
-  <text
-     x="574"
-     y="263"
-     transform="rotate(286 574,263)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text728">XX000015.1 ArGa-DQB*15</text>
   <line
      x1="523"
      y1="419"
@@ -2801,14 +2756,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line736" />
-  <text
-     x="601"
-     y="273"
-     transform="rotate(292 601,273)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text738">AY007204.1 MoSc</text>
   <line
      x1="565"
      y1="349"
@@ -2818,14 +2765,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line740" />
-  <text
-     x="626"
-     y="285"
-     transform="rotate(297 626,285)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text742">HQ456126.1 HaGr</text>
   <line
      x1="584"
      y1="357"
@@ -2856,14 +2795,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line750" />
-  <text
-     x="652"
-     y="299"
-     transform="rotate(303 652,299)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text752">HE663127.1 ZaWo</text>
   <line
      x1="566"
      y1="421"
@@ -2894,14 +2825,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line760" />
-  <text
-     x="674"
-     y="316"
-     transform="rotate(308 674,316)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text762">KP127612.1 NeCi</text>
   <line
      x1="574"
      y1="433"
@@ -2911,14 +2834,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line764" />
-  <text
-     x="695"
-     y="335"
-     transform="rotate(314 695,335)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text766">KP127613.1 NeCi</text>
   <line
      x1="585"
      y1="443"
@@ -2949,14 +2864,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line774" />
-  <text
-     x="714"
-     y="356"
-     transform="rotate(319 714,356)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text776">HE663126.1 ZaWo</text>
   <line
      x1="591"
      y1="456"
@@ -3008,14 +2915,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line790" />
-  <text
-     x="731"
-     y="379"
-     transform="rotate(325 731,379)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text792">XX000002.1 ArGa-DQB*02</text>
   <line
      x1="602"
      y1="465"
@@ -3025,14 +2924,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line794" />
-  <text
-     x="746"
-     y="404"
-     transform="rotate(330 746,404)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text796">XX000011.1 ArGa-DQB*11</text>
   <line
      x1="610"
      y1="476"
@@ -3063,14 +2954,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line804" />
-  <text
-     x="759"
-     y="430"
-     transform="rotate(336 759,430)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text806">XX000009.1 ArGa-DQB*09</text>
   <line
      x1="602"
      y1="494"
@@ -3104,11 +2987,10 @@
   <text
      x="769"
      y="455"
-     transform="rotate(341 769,455)"
-     fill="#000000"
+     transform="rotate(-19,769,455)"
      font-size="15"
-     font-family="Arial"
-     id="text816">XX000013.1 ArGa-DQB*13</text>
+     id="text816"
+     style="font-size:15px;font-family:Arial;fill:#000000" />
   <line
      x1="603"
      y1="506"
@@ -3118,14 +3000,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line818" />
-  <text
-     x="776"
-     y="484"
-     transform="rotate(347 776,484)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text820">AY204353.1 PhHo</text>
   <line
      x1="607"
      y1="518"
@@ -3156,14 +3030,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line828" />
-  <text
-     x="781"
-     y="512"
-     transform="rotate(352 781,512)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text830">AF503397.1 ZaCa</text>
   <line
      x1="612"
      y1="530"
@@ -3173,14 +3039,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line832" />
-  <text
-     x="784"
-     y="540"
-     transform="rotate(358 784,540)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text834">AF503398.1 ZaCa</text>
   <line
      x1="613"
      y1="542"
@@ -3211,14 +3069,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line842" />
-  <text
-     x="783"
-     y="569"
-     transform="rotate(363 783,569)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text844">AF503402.1 ZaCa</text>
   <line
      x1="613"
      y1="555"
@@ -3249,14 +3099,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line852" />
-  <text
-     x="779"
-     y="597"
-     transform="rotate(369 779,597)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text854">AF503406.1 ZaCa</text>
   <line
      x1="612"
      y1="567"
@@ -3287,14 +3129,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line862" />
-  <text
-     x="773"
-     y="626"
-     transform="rotate(374 773,626)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text864">HE663128.1 ZaWo</text>
   <line
      x1="609"
      y1="579"
@@ -3304,14 +3138,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line866" />
-  <text
-     x="764"
-     y="652"
-     transform="rotate(380 764,652)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text868">AF503401.1 ZaCa</text>
   <line
      x1="606"
      y1="591"
@@ -3342,14 +3168,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line876" />
-  <text
-     x="753"
-     y="678"
-     transform="rotate(385 753,678)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text878">AF503400.1 ZaCa</text>
   <line
      x1="601"
      y1="602"
@@ -3359,14 +3177,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line880" />
-  <text
-     x="739"
-     y="704"
-     transform="rotate(391 739,704)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text882">AF503407.1 ZaCa</text>
   <line
      x1="595"
      y1="612"
@@ -3439,14 +3249,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line902" />
-  <text
-     x="723"
-     y="727"
-     transform="rotate(396 723,727)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text904">XX000005.1 ArGa-DQB*05</text>
   <line
      x1="626"
      y1="649"
@@ -3456,14 +3258,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line906" />
-  <text
-     x="704"
-     y="748"
-     transform="rotate(402 704,748)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text908">AF111041.1 ArGa</text>
   <line
      x1="622"
      y1="668"
@@ -3473,14 +3267,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line910" />
-  <text
-     x="684"
-     y="768"
-     transform="rotate(407 684,768)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text912">AF111042.1 ArGa</text>
   <line
      x1="610"
      y1="681"
@@ -3535,11 +3321,10 @@
   <text
      x="662"
      y="786"
-     transform="rotate(413 662,786)"
-     fill="#000000"
+     transform="rotate(53,662,786)"
      font-size="15"
-     font-family="Arial"
-     id="text928">XX000014.1 ArGa-DQB*14</text>
+     id="text928"
+     style="font-size:15px;font-family:Arial;fill:#000000" />
   <line
      x1="580"
      y1="670"
@@ -3570,14 +3355,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line936" />
-  <text
-     x="638"
-     y="802"
-     transform="rotate(418 638,802)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text938">XX000012.1 ArGa-DQB*12</text>
   <line
      x1="565"
      y1="676"
@@ -3611,11 +3388,10 @@
   <text
      x="614"
      y="816"
-     transform="rotate(424 614,816)"
-     fill="#000000"
+     transform="rotate(64,614,816)"
      font-size="15"
-     font-family="Arial"
-     id="text948">XX000008.1 ArGa-DQB*08</text>
+     id="text948"
+     style="font-size:15px;font-family:Arial;fill:#000000" />
   <line
      x1="544"
      y1="664"
@@ -3625,14 +3401,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line950" />
-  <text
-     x="586"
-     y="827"
-     transform="rotate(429 586,827)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text952">AF503399.1 ZaCa</text>
   <line
      x1="532"
      y1="670"
@@ -3687,11 +3455,10 @@
   <text
      x="561"
      y="836"
-     transform="rotate(434 561,836)"
-     fill="#000000"
+     transform="rotate(74,561,836)"
      font-size="15"
-     font-family="Arial"
-     id="text968">XX000006.1 ArGa-DQB*06</text>
+     id="text968"
+     style="font-size:15px;font-family:Arial;fill:#000000" />
   <line
      x1="525"
      y1="689"
@@ -3701,14 +3468,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line970" />
-  <text
-     x="532"
-     y="842"
-     transform="rotate(440 532,842)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text972">AF111040.1 ArGa</text>
   <line
      x1="510"
      y1="691"
@@ -3718,14 +3477,6 @@
      stroke-width="1"
      stroke-linecap="square"
      id="line974" />
-  <text
-     x="504"
-     y="844"
-     transform="rotate(446 504,844)"
-     fill="#000000"
-     font-size="15"
-     font-family="Arial"
-     id="text976">AF111044.1 ArFo</text>
   <line
      x1="497"
      y1="693"
@@ -3901,7 +3652,7 @@
      transform="rotate(-67)"
      font-size="15"
      id="text1030"
-     style="font-size:15px;font-family:Arial;fill:#000000">XX000001.1 ArGa-DQB*03</text>
+     style="font-size:15px;font-family:Arial;fill:#000000">ON060888.1 ArGa-DQB*03</text>
   <line
      x1="422"
      y1="693"

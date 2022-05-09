@@ -2,7 +2,7 @@
 title: Intronic primers reveal unexpectedly high major histocompatibility complex
   diversity in Antarctic fur seals - Code
 author: "J. Tebbe, M. Ottensmann & J.I. Hoffman"
-date: "24th March 2022"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: pdf_document
 bibliography: r-packages.bib
 nocite:
@@ -50,6 +50,12 @@ if (!require("Biostrings", quietly = TRUE)) {
 } else {
 library(Biostrings) # easily work with genetic string sets
 }
+if (!require("Demerelate", quietly = TRUE)) {
+  install.packages("Demerelate")
+  library(Demerelate)
+} else {
+library(Demerelate) # easily work with genetic string sets
+}
 if (!require("EnvStats", quietly = TRUE)) {
   install.packages("EnvStats")
   library(EnvStats)
@@ -71,6 +77,12 @@ library(hierfstat) # hierarchical F-statistics
 if (!require("inbreedR", quietly = TRUE)) {
   install.packages("inbreedR")
   library(inbreedR)
+} else {
+library(inbreedR) # population genetic analyses
+}
+if (!require("lme4", quietly = TRUE)) {
+  install.packages("inbreedR")
+  library(lme4)
 } else {
 library(inbreedR) # population genetic analyses
 }
@@ -1093,11 +1105,72 @@ For this study, we base genetic diversity on pairwise genetic distance measureme
 
 #### Absolute genetic distance: Number of allelic differences in Microsatellite data
 
-```{r}
-msats_gen.abs <- poppr::diss.dist(msats_gen) %>% 
-  # create distance matrix
-  as.matrix()
+```{r eval=FALSE, include=FALSE}
+# msats_gen.abs <- poppr::diss.dist(msats_gen) %>% 
+#   # create distance matrix
+#   as.matrix()
 ```
+
+### Calculate microsatellite relatedness values
+
+#### create `data.frame` in correspondence to `Demerelate` input format
+
+```{r echo = TRUE, results='hide'}
+
+# read in genotype data table
+msats_df <- read.table("data/msats/msats_genotypes_inbreedR.txt", sep = "\t")
+
+# update data.frame with additional info
+# "delete" colony info, otherwise relatedness is only calculated for individuals
+# within their own colonies -> no complete pairwise comparison
+msats_df <- cbind(id = as.factor(rownames(msats_df)), 
+                  # colony = metadata_df$colony, 
+                  colony = rep("col", 56),
+                  msats_df[1:56,]) %>%
+  # clear df from rownames/ only keep colnames/ variable names
+  `rownames<-`(NULL)
+
+msats_df[is.na(msats_df)] = 0
+
+str(msats_df)
+
+write.table(msats_df, file = "data/msats_genotypes_demerelate.txt", 
+            sep = "\t", 
+            row.names = F)
+
+```
+
+#### Calculate relatedness of individuals based on Queller & Goodnight
+
+```{r echo=TRUE, results='hide', message=FALSE}
+
+relatedness_results <- Demerelate(inputdata = msats_df,
+                                  value = "rxy",
+                                  object = T,
+                                  NA.rm = F, 
+                                  Fis = F)
+
+```
+
+#### Coerce output to a vector
+
+```{r}
+
+relatedness <- unlist(relatedness_results$Empirical_Relatedness)
+
+## fill distant matrix / make sure that it follows same systematics as previous distance matrices
+## create empty matrix with equal rows and cols similar to sample size of indidivuals
+relate_mat <- matrix(nrow = 56, ncol = 56)
+## fill distance matrix row wise, thus fill upper.tri
+relate_mat[upper.tri(relate_mat)] <- relatedness
+## transpose to keep consistency with other distance matrices
+relate_mat <- t(relate_mat)
+relate_mat %<>% `colnames<-`(metadata_df$real_id) %>% `rownames<-`(metadata_df$real_id)
+
+## vectorize again to identify whether relatedness pairs were consistent in the first place
+relate_vec <- relate_mat %>% as.vector() %>% na.omit()
+```
+
 
 #### UniFrac distance for MHC DQB II data
 
@@ -1154,21 +1227,6 @@ clone_gen.ufrac <- UniFrac(arga_phylseq, weighted = F) %>%
 
 ```
 
-#### Correlate distance matrices 
-
-Correlate absolute allelic distances with UniFrac distances by performing a 
-Mantel test. 
-
-```{r}
-# keep results consistent
-set.seed(111)
-
-(mantel.corr <- vegan::mantel(clone_gen.ufrac,
-                              msats_gen.abs,
-                              permutations = 9999)) # 4 digit CI
-
-```
-
 #### Plot genetic distance correlation
 
 Vectorize distance matrices based on microsatellite (msats_dist) and MHC (MHC_dist) genotypes:
@@ -1176,8 +1234,8 @@ Vectorize distance matrices based on microsatellite (msats_dist) and MHC (MHC_di
 ```{r}
 ## Msats
 ## -----------------------------------------------------------------------------
-msats_gen.abs[upper.tri(msats_gen.abs, diag = T)] <- NA
-msats_dist <- msats_gen.abs %>% as.vector() %>% na.omit()
+# msats_gen.abs[upper.tri(msats_gen.abs, diag = T)] <- NA
+# msats_dist <- msats_gen.abs %>% as.vector() %>% na.omit()
 
 ## MHC
 ## -----------------------------------------------------------------------------
@@ -1187,20 +1245,106 @@ MHC_dist <- clone_gen.ufrac %>% as.vector() %>% na.omit()
 
 ## combine in one data frame
 ## -----------------------------------------------------------------------------
-df <- cbind(msats_dist, MHC_dist) %>% as.data.frame()
+df <- cbind(relate_vec, MHC_dist) %>% as.data.frame()
 ```
 
 Generate linear model to test for correlation 
 
 ```{r}
-model <- lm(MHC_dist ~ msats_dist) 
+model <- lm(relate_vec ~ MHC_dist) 
 (m <- summary(model))
 ```
+
+Include individual IDs as a random factor
+
+```{r}
+
+create_pair_vars <-function(row_cross, col_cross, split_vars = F){
+  require(stringr)
+  
+  rc <- row_cross
+  cc <- col_cross
+  
+  # create empy matrix
+  # keep row and col names from existing distance matrices
+  
+  empty_mat <- matrix(nrow = length(rc), 
+                      ncol = length(cc)) %>%
+    `colnames<-`(cc) %>%
+    `rownames<-`(rc)
+  
+  # fill each matrix i,j-th cell with the crossing from their corresponding
+  # i-th rowname and j-th colname
+  for (i in 1:dim(empty_mat)[1]) {
+    for (j in 1:dim(empty_mat)[2]) {
+      
+      empty_mat[i,j] <- paste0(rc[i], "/", cc[j])
+      
+    } # end j
+  } # end i
+  
+  
+  # delete `upper.tri()` of `empty_mat` to resemble structure of the other
+  # distance matrices in use
+  
+  empty_mat[upper.tri(empty_mat, diag = T)] <- NA
+  pair_vars <- empty_mat %>% as.vector() %>% na.omit()
+  
+  # split `pair_vars` if needed
+  if (split_vars == T) {
+    
+    pair_vars1 <- sapply(pair_vars, 
+                         function(x){
+                           str_split(x, pattern = "/")[[1]][1]
+                         })
+    
+    pair_vars2 <- sapply(pair_vars, 
+                         function(x){
+                           str_split(x, pattern = "/")[[1]][2]
+                         })
+    
+    pair_vars_split <- list(pair_variable1 = pair_vars1, 
+                            pair_variable2 = pair_vars2)
+    
+    return(pair_vars_split)
+    
+  } else {
+    return(pair_vars)
+  }
+  
+} #end create_pair_vars
+
+# make vars
+
+pairID1 <- create_pair_vars(row_cross = metadata_df$real_id,
+                            col_cross = metadata_df$real_id,
+                            split_vars = T)[1] %>%
+  unlist() %>% 
+  as.vector()
+
+pairID2 <- create_pair_vars(row_cross = metadata_df$real_id,
+                            col_cross = metadata_df$real_id,
+                            split_vars = T)[2] %>%
+  unlist() %>% 
+  as.vector()
+
+```
+
+Create linear mixed effects model with pair IDs
+
+```{r}
+
+rel_model_df <- data.frame(relate_vec, MHC_dist, pairID1, pairID2)
+
+m2 <- lmer(relate_vec ~ MHC_dist + (1|pairID1) + (1|pairID2), data = rel_model_df) 
+(store_m2 <- summary(model))
+```
+
 
 Plot correlation of distance matrices
 
 ```{r}
-figures[[3]] <- ggplot(df, aes(MHC_dist, msats_dist)) +
+figures[[3]] <- ggplot(df, aes(MHC_dist, relate_vec)) +
    geom_point() +
    # geom_jitter(height = 0.002, width = 0.07) +
    geom_smooth(method = "lm", 
@@ -1210,24 +1354,20 @@ figures[[3]] <- ggplot(df, aes(MHC_dist, msats_dist)) +
                fill = "#29af7fff",
                alpha = 0.38,
                size = 1.5) +
-   scale_y_continuous(name   = "Pairwise microsatellite\nallele sharing",
-                      limits = c(20, 70),
-                      expand = c(0,0)) +
-   scale_x_continuous(name   = "Pairwise MHC distances") +
+   scale_y_continuous(name   = "Relatedness") +
+   scale_x_continuous(name   = "MHC UniFrac distance") +
    # annotate(geom = "text", x = 0.05, y = 69,
    #          label = "italic(R²)==0.01", parse = T) +
-   theme_classic(base_size = 16,
-                 base_line_size = 1,
-                 base_rect_size = 1) +
+   theme_classic() +
    theme(
      panel.grid.minor = element_blank(),
      panel.grid.major = element_blank(),
-     plot.margin = unit(c(0.5,0.5,0.5,0,5), "cm"),
+     plot.margin = unit(c(0.5,1.5,0.5,0,5), "cm"),
      axis.title = element_text(color = "black", 
-                               margin = margin(10,10,20,10)),
+                               margin = margin(10,10,10,10)),
      axis.text = element_text(color = "black")
    )
-names(figures)[3] <- "mantel_plot"
+names(figures)[3] <- "relate_plot"
 ```
 
 ## correlate Microsatellite and MHC DQB II heterozygosity
@@ -1300,20 +1440,19 @@ figures[[4]] <- ggplot(data = corr_het,
                           x = mhc_het)) + 
   geom_jitter(height = 0.02,
               width = 0.07,
-              size = 4) +
+              size = 2.5) +
   geom_smooth(method = "glm", 
               formula = "y ~ x",
               color = "#fde725ff",
               fill = "#29af7fff",
-              alpha = 0.38,
-              size = 2) +
+              alpha = 0.38) +
   ylab("sMLH") +
   scale_x_continuous(name = "MHC heterozygosity",
                      breaks = c(0,1),
                      labels = c("homozygote", "heterozygote")) +
-  theme_classic(base_size = 16,
-                  base_line_size = 1,
-                  base_rect_size = 1) +
+  theme_classic() + # base_size = 13,
+                  # base_line_size = 1,
+                  # base_rect_size = 1
   theme(
     # panel.background = element_rect(color = "black", size = 1.5),
     panel.grid = element_blank(),
@@ -1328,12 +1467,13 @@ names(figures)[4] <- "het_corr_plot"
 ```{r}
 
 
-mhc_het.p <- figures[[4]] + labs(tag = "A")
-mhc_div.p <- figures[[3]] + labs(tag = "B")
+mhc_het.p <- figures[[4]] + labs(tag = "A") + theme(aspect.ratio = 0.7)
+mhc_div.p <- figures[[3]] + labs(tag = "B") + theme(aspect.ratio = 0.7)
 
-(ggpubr::ggarrange(mhc_het.p, mhc_div.p, nrow = 2, ncol = 1, align = "v"))
+(ggpubr::ggarrange(mhc_het.p, mhc_div.p, nrow = 2, ncol = 1, align = "hv"))
 
-# ggsave("graphics/mhc_het_div_panel.png", dpi = 300, width = 6, height = 9)
+ggsave("graphics/mhc_het_div_panel.png", dpi = 400, width = 10, height = 7)
+       # , width = 9, height = 7)
 
 ```
 
