@@ -137,9 +137,13 @@ ngs_freq
 
 
 
-nwk <- system.file("extdata", "data/phylogeny/seal_dqb.nwk", package="treeio")
-tree <- read.tree(nwk)
-p <- ggtree(tree)
+nwk <- system.file("extdata", "data/phylogeny/tree.nwk", package="treeio")
+tree <- ape::read.tree("data/phylogeny/tree.nwk")
+(
+p <- ggtree(tree, layout = "circular") + 
+  geom_tiplab() +
+  geom_treescale()
+)
 
 
 clone_genotype_df <- allele_summary[allele_summary$alleles %in% levels(allele_summary$alleles)[1:19],]
