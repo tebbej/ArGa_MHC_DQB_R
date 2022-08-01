@@ -8,7 +8,7 @@ library(tidyverse)
 
 tree <- ape::read.tree("data/phylogeny/tree.nwk")
 # tree <- root(tree, "AM259941.1_Homo_Sapiens", resolve.root = T)
-# tree <- root(tree, node = 64, edgelabel = F, resolve.root = T)
+tree <- root(tree, node = 130, edgelabel = F, resolve.root = T)
 
 is.rooted(tree)
 # tree <- drop.tip(tree, "AM259941.1_Homo_Sapiens")
@@ -47,6 +47,12 @@ tip_df %<>% mutate(species = as.factor(species))
 # the metadata with the tree `Formal class treedata`
 tree$tip.label <- tip_df$label
 
+# dataframe needs update, too! Drop unused names and correct entries
+tip_drop <- tip_df$label[63:67]
+
+tree <- drop.tip(tree, tip_drop)
+tree$tip.label[63] <- "Canis lupus familiaris"
+
 # PHYLOGENY
 # create initial tree
 {
@@ -65,6 +71,10 @@ tree$tip.label <- tip_df$label
     geom_treescale(x = 0.03, y = -1) +
     theme(
       legend.position = "bottom"
-    )
+    ) 
   p
-}
+} 
+    # p <- ggtree::collapse(p, node = 135)
+
+
+
