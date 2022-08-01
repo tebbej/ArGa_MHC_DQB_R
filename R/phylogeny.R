@@ -7,7 +7,7 @@ library(tidyverse)
 # nwk <- system.file("extdata", "data/phylogeny/tree.nwk", package="treeio")
 
 tree <- ape::read.tree("data/phylogeny/tree.nwk")
-tree <- root(tree, "AM259941.1_Homo_Sapiens", resolve.root = T)
+# tree <- root(tree, "AM259941.1_Homo_Sapiens", resolve.root = T)
 # tree <- root(tree, node = 64, edgelabel = F, resolve.root = T)
 
 is.rooted(tree)
@@ -38,7 +38,7 @@ tip_df <- data.frame(label = tip_df,
                        accession = tip_acc, 
                        species = tip_species) %>% 
   `rownames<-`(NULL)
-tip_df[63,] <- c("AM259941.1 HoSa", "AM259941.1", "HoSa")
+# tip_df[63,] <- c("AM259941.1 HoSa", "AM259941.1", "HoSa")
 tip_df %<>% mutate(species = as.factor(species))
 
 # Seemingly: for `%<+%` to work and join information of tip label with
