@@ -52,6 +52,8 @@ tip_drop <- tip_df$label[63:67]
 
 tree <- drop.tip(tree, tip_drop)
 tree$tip.label[63] <- "Canis lupus familiaris"
+tip_df <- tip_df[1:63,]
+tip_df[63,] <- c("Canis lupus familiaris", "AF016904-AF016909", "CaFa")
 
 # PHYLOGENY
 # create initial tree
@@ -69,12 +71,12 @@ tree$tip.label[63] <- "Canis lupus familiaris"
     geom_tippoint(aes(color = species)) +
     # scale_color_viridis_c() +
     geom_treescale(x = 0.03, y = -1) +
+    labs(color = "Species") + 
     theme(
       legend.position = "bottom"
     ) 
-  p
+  p + guides(color = guide_legend(title.position = "top"))
 } 
-    # p <- ggtree::collapse(p, node = 135)
 
 
 
