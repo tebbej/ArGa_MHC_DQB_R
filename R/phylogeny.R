@@ -38,7 +38,7 @@ tip_df <- data.frame(label = tip_df,
                        accession = tip_acc, 
                        species = tip_species) %>% 
   `rownames<-`(NULL)
-# tip_df[63,] <- c("AM259941.1 HoSa", "AM259941.1", "HoSa")
+
 tip_df %<>% mutate(species = as.factor(species))
 
 # Seemingly: for `%<+%` to work and join information of tip label with
@@ -56,6 +56,23 @@ tip_df <- tip_df[1:63,]
 tip_df[63,] <- c("Canis lupus familiaris", "AF016904-AF016909", "CaFa")
 
 # PHYLOGENY
+
+species_names <- c("Arctocephalus forsteri", 
+                   "Arctocephalus gazella", 
+                   "Canis lupus familiaris", 
+                   "Halichoerus grypus", 
+                   "Mirounga angustirostris",
+                   "Mirounga leonina", 
+                   "Monachus schauinslandi", 
+                   "Neophoca cinerea", 
+                   "Odobenus rosmarus",
+                   "Phocarctos hookeri",
+                   "Zalophus californianus", 
+                   "Zalophus wollebaeki")
+
+species_palette <- RColorBrewer::brewer.pal(12, "Set3")
+species_palette[c(2,3, 12)] <- c("black", "#a76437","red")
+
 # create initial tree
 {
   p <- ggtree(tree, 
@@ -64,19 +81,39 @@ tip_df[63,] <- c("Canis lupus familiaris", "AF016904-AF016909", "CaFa")
   # provide metadata: `%<+%`
   p <- p %<+% tip_df + 
     # geom_aline() +
-    geom_tiplab2(size = 3, 
-                 align = T, 
+    geom_tiplab2(size = 5, 
+                 align = F, 
                  hjust = -0.05) +
     geom_rootedge(rootedge = 0.05) +
-    geom_tippoint(aes(color = species)) +
+    scale_color_manual(values = species_palette,
+                       labels = species_names) +    
+    geom_tippoint(aes(color = species),
+                  size = 3) +
     # scale_color_viridis_c() +
-    geom_treescale(x = 0.03, y = -1) +
+    geom_treescale(x = 0,
+                   linesize = 1.3,
+                   offset = 1) +
+    xlim_tree(.35) +
     labs(color = "Species") + 
     theme(
-      legend.position = "bottom"
-    ) 
+      legend.position = "right"
+    )
   p + guides(color = guide_legend(title.position = "top"))
 } 
 
+addSmallLegend <- function(myPlot, pointSize = 0.5, textSize = 3, spaceLegend = 0.1) {
+  myPlot +
+    guides(shape = guide_legend(override.aes = list(size = pointSize),
+                                ncol = 3,
+                                label.hjust = 0),
+           color = guide_legend(override.aes = list(size = pointSize))) +
+    theme(legend.title = element_blank(),
+          legend.text  = element_text(size = textSize),
+          legend.key.size = unit(spaceLegend, "lines"))
+}
+
+p <- addSmallLegend(p, pointSize = 3, textSize = 14)
+p
 
 
+ggsave("graphics/phyl_new.png", dpi = 400, width = 50.24, height = 32.88, units = "cm")
